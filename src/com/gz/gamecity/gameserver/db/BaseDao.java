@@ -1,15 +1,16 @@
 package com.gz.gamecity.gameserver.db;
 
+import com.gz.gamecity.gameserver.config.ConfigField;
+import com.gz.util.Config;
+
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
 
 public abstract class BaseDao {
 	
 	protected static Jedis getConn() {
 		try {
 			Jedis jedis = JedisConnectionPool.getJedisConn();
-			
+			jedis.select(Config.instance().getIValue(ConfigField.DB_INDEX));
 			return jedis;
 		} catch (Exception e) {
 			e.printStackTrace();
