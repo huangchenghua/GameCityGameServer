@@ -2,7 +2,7 @@ package com.gz.gamecity.gameserver;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.log4j.Logger;
 
@@ -11,9 +11,9 @@ import com.gz.websocket.msg.BaseMsg;
 
 public class GSMsgReceiver extends Thread {
 	private static final Logger log=Logger.getLogger(GSMsgReceiver.class);
-private static GSMsgReceiver instance;
+	private static GSMsgReceiver instance;
 	
-	private LinkedBlockingDeque<BaseMsg> queue = new LinkedBlockingDeque<BaseMsg>();
+	private LinkedBlockingQueue<BaseMsg> queue = new LinkedBlockingQueue<BaseMsg>();
 	
 	private Map<Integer, LogicHandler> handlers=new HashMap<Integer, LogicHandler>();
 	
@@ -29,7 +29,11 @@ private static GSMsgReceiver instance;
 	}
 	
 	public void addMsg(BaseMsg msg){
-		queue.add(msg);
+		try {
+			queue.put(msg);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

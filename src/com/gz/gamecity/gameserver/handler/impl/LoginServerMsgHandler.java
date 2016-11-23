@@ -2,6 +2,7 @@ package com.gz.gamecity.gameserver.handler.impl;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.gz.gamecity.gameserver.LoginMsgSender;
 import com.gz.gamecity.gameserver.config.ConfigField;
 import com.gz.gamecity.gameserver.protocol.ProtocolsField;
 import com.gz.util.Config;
@@ -34,7 +35,8 @@ public class LoginServerMsgHandler implements ProtocolClientMsgHandler{
 
 		String body = json.toJSONString();
 		msg.setContent(body);
-		channel.writeAndFlush(msg);
+		msg.setChannel(channel);
+		LoginMsgSender.getInstance().addMsg(msg);
 	}
 
 }
