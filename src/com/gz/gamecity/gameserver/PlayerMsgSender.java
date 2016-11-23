@@ -2,8 +2,8 @@ package com.gz.gamecity.gameserver;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
+import com.gz.gamecity.gameserver.msg.ClientMsg;
 import com.gz.websocket.msg.BaseMsg;
-import com.gz.websocket.msg.ProtocolMsg;
 
 public class PlayerMsgSender extends Thread {
 
@@ -17,9 +17,9 @@ public class PlayerMsgSender extends Thread {
 		
 	}
 	
-	private static LinkedBlockingQueue<ProtocolMsg> queue=new LinkedBlockingQueue<ProtocolMsg>();
+	private static LinkedBlockingQueue<ClientMsg> queue=new LinkedBlockingQueue<ClientMsg>();
 	
-	public void addMsg(ProtocolMsg msg){
+	public void addMsg(ClientMsg msg){
 		try {
 			queue.put(msg);
 		} catch (InterruptedException e) {
