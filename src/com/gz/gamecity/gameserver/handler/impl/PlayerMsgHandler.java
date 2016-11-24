@@ -1,8 +1,8 @@
 package com.gz.gamecity.gameserver.handler.impl;
 
 import com.gz.gamecity.gameserver.GSMsgReceiver;
-import com.gz.gamecity.gameserver.msg.ClientMsg;
 import com.gz.websocket.msg.BaseMsg;
+import com.gz.websocket.msg.ClientMsg;
 import com.gz.websocket.server.ServerMsgHandler;
 
 import io.netty.channel.Channel;
