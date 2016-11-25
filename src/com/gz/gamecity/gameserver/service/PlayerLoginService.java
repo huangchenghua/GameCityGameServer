@@ -44,6 +44,7 @@ public class PlayerLoginService implements LogicHandler {
 			break;
 		}
 	}
+	
 	private void handlePlayerLogin(ClientMsg cMsg) {
 		String uuid=cMsg.getJson().getString(Protocols.C2g_login.UUID);
 		String gameToken=cMsg.getJson().getString(Protocols.C2g_login.GAMETOKEN);
