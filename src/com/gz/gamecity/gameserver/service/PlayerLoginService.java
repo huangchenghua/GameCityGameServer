@@ -64,6 +64,8 @@ public class PlayerLoginService implements LogicHandler {
 		JSONObject json=new JSONObject();
 		json.put(Protocols.MAINCODE, Protocols.G2l_playerVerify.mainCode_value);
 		json.put(Protocols.SUBCODE, Protocols.G2l_playerVerify.subCode_value);
+		json.put(Protocols.G2l_playerVerify.UUID, uuid);
+		json.put(Protocols.G2l_playerVerify.GAMETOKEN, gameToken);
 		ProtocolMsg msg = new ProtocolMsg();
 		msg.setJson(json);
 		LoginMsgSender.getInstance().addMsg(msg);

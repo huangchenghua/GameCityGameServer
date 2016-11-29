@@ -3,6 +3,7 @@ package com.gz.gamecity.gameserver.service;
 import com.gz.gamecity.bean.Player;
 import com.gz.gamecity.gameserver.GameServiceMain;
 import com.gz.gamecity.gameserver.LoginMsgSender;
+import com.gz.gamecity.gameserver.PlayerMsgSender;
 import com.gz.gamecity.gameserver.logic.LogicHandler;
 import com.gz.gamecity.protocol.Protocols;
 import com.gz.websocket.msg.BaseMsg;
@@ -38,7 +39,10 @@ public class LoginServerService implements LogicHandler {
 					
 				}
 				else{
-					cMsg.getJson().put(Protocols.G2c_login.OPT, Protocols.ProtocolConst.G2C_LOGIN_OPT_SUC);
+					cMsg.setChannel(player.getChannel());
+					cMsg.getJson().put(Protocols.G2c_login.NAME, pMsg.getJson().get(Protocols.L2g_playerVerify.NAME));
+					cMsg.getJson().put(Protocols.G2c_login.COIN, pMsg.getJson().get(Protocols.L2g_playerVerify.COIN));
+					PlayerMsgSender.getInstance().addMsg(cMsg);
 					
 				}
 			}

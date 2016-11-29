@@ -4,6 +4,7 @@ import com.gz.gamecity.gameserver.config.ConfigField;
 import com.gz.gamecity.gameserver.handler.impl.LoginServerMsgHandler;
 import com.gz.gamecity.gameserver.handler.impl.PlayerMsgHandler;
 import com.gz.gamecity.gameserver.service.LoginServerService;
+import com.gz.gamecity.gameserver.service.PlayerLoginService;
 import com.gz.gamecity.protocol.Protocols;
 import com.gz.util.Config;
 import com.gz.websocket.protocol.client.ProtocolClient;
@@ -80,6 +81,7 @@ public class GameServiceMain {
 
 	private void startLogic() {
 		 GSMsgReceiver.getInstance().registHandler(Protocols.L2g_login.mainCode_value,new LoginServerService());
+		 GSMsgReceiver.getInstance().registHandler(Protocols.C2g_login.mainCode_value, PlayerLoginService.getInstance());
 		// PlayerLoginService.getInstance());
 		GSMsgReceiver.getInstance().start();
 	}
