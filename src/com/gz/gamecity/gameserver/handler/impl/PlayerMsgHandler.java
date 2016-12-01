@@ -1,11 +1,16 @@
 package com.gz.gamecity.gameserver.handler.impl;
 
+
+import com.alibaba.fastjson.JSONObject;
+import com.gz.gamecity.bean.Player;
 import com.gz.gamecity.gameserver.GSMsgReceiver;
+import com.gz.gamecity.protocol.Protocols;
 import com.gz.websocket.msg.BaseMsg;
 import com.gz.websocket.msg.ClientMsg;
 import com.gz.websocket.server.ServerMsgHandler;
 
 import io.netty.channel.Channel;
+import io.netty.util.Attribute;
 
 public class PlayerMsgHandler implements ServerMsgHandler{
 
@@ -19,8 +24,17 @@ public class PlayerMsgHandler implements ServerMsgHandler{
 
 	@Override
 	public void onSessionClosed(Channel channel) {
-		// TODO Auto-generated method stub
-		
+		Attribute<Player> attr = channel.attr(Player.NETTY_CHANNEL_KEY);  
+		Player player = attr.get();
+		if(player!=null){
+			ClientMsg msg=new ClientMsg();
+			msg.setMainCode(Protocols.Inner_game_player_logout.mainCode_value);
+			JSONObject json = new JSONObject();
+			json.put(Protocols.MAINCODE, Protocols.Inner_game_player_logout.mainCode_value);
+			json.put(Protocols.SUBCODE, Protocols.Inner_game_player_logout.subCode_value);
+			json.put(Protocols.Inner_game_player_logout.UUID, player.getUuid());
+			GSMsgReceiver.getInstance().addMsg(msg);
+		}
 	}
 
 }

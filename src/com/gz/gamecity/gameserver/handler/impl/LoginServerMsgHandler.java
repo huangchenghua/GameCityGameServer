@@ -21,7 +21,7 @@ public class LoginServerMsgHandler implements ProtocolClientMsgHandler{
 
 	@Override
 	public void onSessionClosed(Channel channel) {
-		// TODO Auto-generated method stub
+		System.out.println("与登录服的连接被断开");
 		
 	}
 

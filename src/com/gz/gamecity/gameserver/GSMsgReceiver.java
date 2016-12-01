@@ -6,7 +6,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.log4j.Logger;
 
-import com.gz.gamecity.gameserver.logic.LogicHandler;
+import com.gz.gamecity.gameserver.service.LogicHandler;
 import com.gz.websocket.msg.BaseMsg;
 
 public class GSMsgReceiver extends Thread {
@@ -55,7 +55,8 @@ public class GSMsgReceiver extends Thread {
 		}
 	}
 	
-	public void registHandler(int mainCode,LogicHandler handler){
-		handlers.put(mainCode, handler);
+	
+	public void registHandler(LogicHandler handler){
+		handlers.put(handler.getMainCode(), handler);
 	}
 }

@@ -3,8 +3,9 @@ package com.gz.gamecity.gameserver;
 import com.gz.gamecity.gameserver.config.ConfigField;
 import com.gz.gamecity.gameserver.handler.impl.LoginServerMsgHandler;
 import com.gz.gamecity.gameserver.handler.impl.PlayerMsgHandler;
-import com.gz.gamecity.gameserver.service.LoginServerService;
-import com.gz.gamecity.gameserver.service.PlayerLoginService;
+import com.gz.gamecity.gameserver.service.common.LoginServerService;
+import com.gz.gamecity.gameserver.service.common.PlayerLoginService;
+import com.gz.gamecity.gameserver.service.common.PlayerVerifyService;
 import com.gz.gamecity.protocol.Protocols;
 import com.gz.util.Config;
 import com.gz.websocket.protocol.client.ProtocolClient;
@@ -48,16 +49,20 @@ public class GameServiceMain {
 		
 		LoginMsgSender.getInstance().start();
 		PlayerMsgSender.getInstance().start();
+
+//		LSConnecter connecter=LSConnecter.getInstance();
+//		connecter.connectLoginServer();
 		
-		LoginServerMsgHandler handler = new LoginServerMsgHandler();
-		final ProtocolClient client = new ProtocolClient(Config.instance().getSValue(ConfigField.LOGINSERVER_HOST),
-				Config.instance().getIValue(ConfigField.LOGINSERVER_PORT), handler);
+//		LoginServerMsgHandler handler = new LoginServerMsgHandler();
+//		final ProtocolClient client = new ProtocolClient(Config.instance().getSValue(ConfigField.LOGINSERVER_HOST),
+//				Config.instance().getIValue(ConfigField.LOGINSERVER_PORT), handler);
 		Thread t1 = new Thread() {
 			@Override
 			public void run() {
 				try {
-					client.run();
-				} catch (InterruptedException e) {
+//					client.run();
+					LSConnecter.getInstance().connectLoginServer();
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -80,8 +85,10 @@ public class GameServiceMain {
 	}
 
 	private void startLogic() {
-		 GSMsgReceiver.getInstance().registHandler(Protocols.L2g_login.mainCode_value,new LoginServerService());
-		 GSMsgReceiver.getInstance().registHandler(Protocols.C2g_login.mainCode_value, PlayerLoginService.getInstance());
+		PlayerManager.getInstance();
+		 GSMsgReceiver.getInstance().registHandler(new LoginServerService());
+		 GSMsgReceiver.getInstance().registHandler(PlayerLoginService.getInstance());
+		 GSMsgReceiver.getInstance().registHandler(new PlayerVerifyService());
 		// PlayerLoginService.getInstance());
 		GSMsgReceiver.getInstance().start();
 	}
