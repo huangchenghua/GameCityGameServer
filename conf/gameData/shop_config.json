@@ -1,0 +1,10 @@
+[
+	{"fee":6,"coin":60000,"icon":0,"itemId":0},
+	{"fee":30,"coin":300000,"icon":1,"itemId":1},
+	{"fee":60,"coin":600000,"icon":2,"itemId":2},
+	{"fee":98,"coin":980000,"icon":3,"itemId":3},
+	{"fee":188,"coin":1880000,"icon":4,"itemId":4},
+	{"fee":288,"coin":2880000,"icon":5,"itemId":5},
+	{"fee":388,"coin":3880000,"icon":6,"itemId":6},
+	{"fee":648,"coin":6480000,"icon":7,"itemId":7}
+]

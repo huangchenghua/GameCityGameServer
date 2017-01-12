@@ -1,0 +1,10 @@
+﻿[
+{"id":1,"name":"咖啡","price":1000,"reward":900,"charm":9},
+{"id":2,"name":"鲜花","price":5000,"reward":4500,"charm":45},
+{"id":3,"name":"钻戒","price":10000,"reward":9000,"charm":90},
+{"id":4,"name":"跑车","price":50000,"reward":45000,"charm":450},
+{"id":5,"name":"游轮","price":100000,"reward":90000,"charm":900},
+{"id":6,"name":"豪宅","price":500000,"reward":450000,"charm":4500},
+{"id":7,"name":"飞机","price":1000000,"reward":900000,"charm":9000},
+{"id":8,"name":"海岛","price":10000000,"reward":9000000,"charm":90000}
+]

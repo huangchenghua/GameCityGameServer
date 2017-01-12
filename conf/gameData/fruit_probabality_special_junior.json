@@ -1,0 +1,9 @@
+[
+{"id":"25","name":"小三元","odds":"-1","startValue":"1","endValue":"1000","probability":"10.00%"},
+{"id":"26","name":"大三元","odds":"-1","startValue":"1001","endValue":"1500","probability":"5.00%"},
+{"id":"27","name":"四海游龙","odds":"-1","startValue":"1501","endValue":"1700","probability":"2.00%"},
+{"id":"28","name":"大四喜","odds":"20","startValue":"1701","endValue":"3900","probability":"22.00%"},
+{"id":"29","name":"小满贯","odds":"21","startValue":"3901","endValue":"5900","probability":"20.00%"},
+{"id":"30","name":"大满贯","odds":"371","startValue":"5901","endValue":"6000","probability":"1.00%"},
+{"id":"31","name":"流产","odds":"0","startValue":"6001","endValue":"10000","probability":"40.00%"}
+]

@@ -1,0 +1,17 @@
+[
+    {"vip":1,"charge":6},
+    {"vip":2,"charge":30},
+    {"vip":3,"charge":100},
+    {"vip":4,"charge":300},
+    {"vip":5,"charge":500},
+    {"vip":6,"charge":1000},
+    {"vip":7,"charge":3000},
+    {"vip":8,"charge":5000},
+    {"vip":9,"charge":10000},
+    {"vip":10,"charge":20000},
+    {"vip":11,"charge":50000},
+    {"vip":12,"charge":100000},
+    {"vip":13,"charge":200000},
+    {"vip":14,"charge":300000},
+    {"vip":15,"charge":800000}
+]

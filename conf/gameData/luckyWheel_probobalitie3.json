@@ -1,0 +1,13 @@
+[
+{"id":1,"prize":1000,"startValue":7221,"endValue":10000},
+{"id":2,"prize":2000,"startValue":5321,"endValue":7220},
+{"id":3,"prize":4000,"startValue":21,"endValue":1420},
+{"id":4,"prize":8000,"startValue":1421,"endValue":2520},
+{"id":5,"prize":10000,"startValue":2521,"endValue":3320},
+{"id":6,"prize":16000,"startValue":3321,"endValue":4020},
+{"id":7,"prize":20000,"startValue":4021,"endValue":4620},
+{"id":8,"prize":40000,"startValue":4621,"endValue":5120},
+{"id":9,"prize":50000,"startValue":5121,"endValue":5320},
+{"id":10,"prize":100000,"startValue":1,"endValue":10},
+{"id":11,"prize":150000,"startValue":11,"endValue":20}
+]

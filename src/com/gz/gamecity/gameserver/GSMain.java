@@ -1,6 +1,7 @@
 package com.gz.gamecity.gameserver;
 
 
+
 public class GSMain {
 
 	public static void main(String[] args) {

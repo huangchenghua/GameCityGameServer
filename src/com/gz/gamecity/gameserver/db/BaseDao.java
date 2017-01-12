@@ -1,29 +1,37 @@
 package com.gz.gamecity.gameserver.db;
 
-import com.gz.gamecity.gameserver.config.ConfigField;
-import com.gz.util.Config;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
-import redis.clients.jedis.Jedis;
+import com.gz.dbpools.ConnectionFactory;
 
 public abstract class BaseDao {
-	
-	protected static Jedis getConn() {
+	protected Connection getConn() {
+		Connection conn=null;
 		try {
-			Jedis jedis = JedisConnectionPool.getJedisConn();
-			jedis.select(Config.instance().getIValue(ConfigField.DB_INDEX));
-			return jedis;
+			conn = ConnectionFactory.lookup("game").getConnection();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return conn;
 	}
 	
-	protected static void closeConn(Jedis jedis) {
+	protected void close(ResultSet rs,PreparedStatement pstmt,Connection conn) {
 		try {
-			if(jedis!=null)
-				jedis.close();
+			if(rs!=null)
+				rs.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+		}
+		try {
+			if(pstmt!=null)
+				pstmt.close();
+		} catch (Exception e) {
+		}
+		try {
+			if(conn!=null)
+				conn.close();
+		} catch (Exception e) {
 		}
 	}
 }

@@ -1,0 +1,6 @@
+[
+	{"minCoin":100,"maxCoin":10000,"award":10},
+	{"minCoin":10000,"maxCoin":1000000,"award":1000},
+	{"minCoin":1000000,"maxCoin":100000000,"award":100000},
+	{"minCoin":100000000,"maxCoin":88888888888,"award":10000000}
+]

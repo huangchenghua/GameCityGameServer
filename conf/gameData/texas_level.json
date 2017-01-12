@@ -1,0 +1,6 @@
+[
+{"lv":1,"blinds_min":100,"blinds_max":200,"bet_min":100,"banker_condition":1000,"rate_commission":0.05},
+{"lv":2,"blinds_min":1000,"blinds_max":2000,"bet_min":1000,"banker_condition":100000,"rate_commission":0.07},
+{"lv":3,"blinds_min":10000,"blinds_max":20000,"bet_min":10000,"banker_condition":1000000,"rate_commission":0.10},
+
+]

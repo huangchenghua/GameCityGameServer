@@ -1,0 +1,18 @@
+[
+{"id": 0,"charge": 0,"tick": 0,"chat_normal": 1,"chat_laba":0,"send_gift":0,"friends_max":10,"signed_coin":0},
+{"id": 1,"charge": 6,"tick": 1,"chat_normal": 1,"chat_laba":0,"send_gift":0,"friends_max":20,"signed_coin":400},
+{"id": 2,"charge": 30,"tick": 1,"chat_normal": 1,"chat_laba":0,"send_gift":0,"friends_max":25,"signed_coin":600},
+{"id": 3,"charge": 100,"tick": 1,"chat_normal": 1,"chat_laba":0,"send_gift":1,"friends_max":30,"signed_coin":1000},
+{"id": 4,"charge": 300,"tick": 1,"chat_normal": 1,"chat_laba":0,"send_gift":1,"friends_max":35,"signed_coin":1500},
+{"id": 5,"charge": 500,"tick": 1,"chat_normal": 1,"chat_laba":1,"send_gift":1,"friends_max":40,"signed_coin":2000},
+{"id": 6,"charge": 1000,"tick": 1,"chat_normal": 1,"chat_laba":1,"send_gift":1,"friends_max":45,"signed_coin":3000},
+{"id": 7,"charge": 3000,"tick": 1,"chat_normal": 1,"chat_laba":1,"send_gift":1,"friends_max":50,"signed_coin":4000},
+{"id": 8,"charge": 5000,"tick": 1,"chat_normal": 1,"chat_laba":1,"send_gift":1,"friends_max":55,"signed_coin":5000},
+{"id": 9,"charge": 10000,"tick": 1,"chat_normal": 1,"chat_laba":1,"send_gift":1,"friends_max":60,"signed_coin":6000},
+{"id": 10,"charge": 20000,"tick": 1,"chat_normal": 1,"chat_laba":1,"send_gift":1,"friends_max":65,"signed_coin":10000},
+{"id": 11,"charge": 50000,"tick": 1,"chat_normal": 1,"chat_laba":1,"send_gift":1,"friends_max":70,"signed_coin":20000},
+{"id": 12,"charge": 100000,"tick": 1,"chat_normal": 1,"chat_laba":1,"send_gift":1,"friends_max":75,"signed_coin":40000},
+{"id": 13,"charge": 200000,"tick": 1,"chat_normal": 1,"chat_laba":1,"send_gift":1,"friends_max":80,"signed_coin":80000},
+{"id": 14,"charge": 300000,"tick": 1,"chat_normal": 1,"chat_laba":1,"send_gift":1,"friends_max":90,"signed_coin":100000},
+{"id": 15,"charge": 800000,"tick": 1,"chat_normal": 1,"chat_laba":1,"send_gift":1,"friends_max":100,"signed_coin":300000},
+] 

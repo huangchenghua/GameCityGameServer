@@ -1,0 +1,122 @@
+2017-01-12 09:04:20 INFO  GameServiceMain:149 - 配置文件加载成功
+2017-01-12 09:04:21 INFO  ProtocolClient:68 - 服务启动
+2017-01-12 09:04:21 DEBUG InternalLoggerFactory:59 - Using Log4J as the default logging framework
+2017-01-12 09:04:21 DEBUG MultithreadEventLoopGroup:43 - -Dio.netty.eventLoopThreads: 8
+2017-01-12 09:04:21 DEBUG PlatformDependent0:87 - java.nio.Buffer.address: available
+2017-01-12 09:04:21 DEBUG PlatformDependent0:123 - sun.misc.Unsafe.theUnsafe: available
+2017-01-12 09:04:21 DEBUG PlatformDependent0:147 - sun.misc.Unsafe.copyMemory: available
+2017-01-12 09:04:21 DEBUG PlatformDependent0:194 - direct buffer constructor: available
+2017-01-12 09:04:21 DEBUG PlatformDependent0:243 - java.nio.Bits.unaligned: available, true
+2017-01-12 09:04:21 DEBUG PlatformDependent0:255 - java.nio.DirectByteBuffer.<init>(long, int): available
+2017-01-12 09:04:21 DEBUG Cleaner0:67 - java.nio.ByteBuffer.cleaner(): available
+2017-01-12 09:04:21 DEBUG PlatformDependent:972 - Platform: Windows
+2017-01-12 09:04:21 DEBUG PlatformDependent:1079 - Java version: 7
+2017-01-12 09:04:21 DEBUG PlatformDependent:1116 - -Dio.netty.noUnsafe: false
+2017-01-12 09:04:21 DEBUG PlatformDependent:1151 - sun.misc.Unsafe: available
+2017-01-12 09:04:21 DEBUG PlatformDependent:1226 - -Dio.netty.noJavassist: false
+2017-01-12 09:04:21 DEBUG PlatformDependent:1239 - Javassist: unavailable
+2017-01-12 09:04:21 DEBUG PlatformDependent:1240 - You don't have Javassist in your class path or you don't have enough permission to load dynamically generated classes.  Please check the configuration for better performance.
+2017-01-12 09:04:21 DEBUG PlatformDependent:1258 - -Dio.netty.tmpdir: C:\Users\ADMINI~1\AppData\Local\Temp (java.io.tmpdir)
+2017-01-12 09:04:21 DEBUG PlatformDependent:1337 - -Dio.netty.bitMode: 64 (sun.arch.data.model)
+2017-01-12 09:04:21 DEBUG PlatformDependent:118 - -Dio.netty.noPreferDirect: false
+2017-01-12 09:04:21 DEBUG PlatformDependent:154 - io.netty.maxDirectMemory: 1886388224 bytes
+2017-01-12 09:04:21 DEBUG NioEventLoop:111 - -Dio.netty.noKeySetOptimization: false
+2017-01-12 09:04:21 DEBUG NioEventLoop:112 - -Dio.netty.selectorAutoRebuildThreshold: 512
+2017-01-12 09:04:21 DEBUG PlatformDependent:870 - org.jctools-core.MpscChunkedArrayQueue: available
+2017-01-12 09:04:21 DEBUG DefaultChannelId:86 - -Dio.netty.processId: 9748 (auto-detected)
+2017-01-12 09:04:21 DEBUG NetUtil:135 - -Djava.net.preferIPv4Stack: false
+2017-01-12 09:04:21 DEBUG NetUtil:136 - -Djava.net.preferIPv6Addresses: false
+2017-01-12 09:04:21 DEBUG NetUtil:217 - Loopback interface: lo (Software Loopback Interface 1, 127.0.0.1)
+2017-01-12 09:04:21 DEBUG NetUtil:268 - \proc\sys\net\core\somaxconn: 200 (non-existent)
+2017-01-12 09:04:21 DEBUG DefaultChannelId:106 - -Dio.netty.machineId: 00:00:00:00:00:00:00:e0 (auto-detected)
+2017-01-12 09:04:21 DEBUG ThreadLocalRandom:226 - -Dio.netty.initialSeedUniquifier: 0x4ca860c7b3a04c52
+2017-01-12 09:04:21 DEBUG ResourceLeakDetector:106 - -Dio.netty.leakDetection.level: simple
+2017-01-12 09:04:21 DEBUG ResourceLeakDetector:107 - -Dio.netty.leakDetection.maxRecords: 4
+2017-01-12 09:04:21 DEBUG PooledByteBufAllocator:107 - -Dio.netty.allocator.numHeapArenas: 8
+2017-01-12 09:04:21 DEBUG PooledByteBufAllocator:108 - -Dio.netty.allocator.numDirectArenas: 8
+2017-01-12 09:04:21 DEBUG PooledByteBufAllocator:110 - -Dio.netty.allocator.pageSize: 8192
+2017-01-12 09:04:21 DEBUG PooledByteBufAllocator:115 - -Dio.netty.allocator.maxOrder: 11
+2017-01-12 09:04:21 DEBUG PooledByteBufAllocator:119 - -Dio.netty.allocator.chunkSize: 16777216
+2017-01-12 09:04:21 DEBUG PooledByteBufAllocator:120 - -Dio.netty.allocator.tinyCacheSize: 512
+2017-01-12 09:04:21 DEBUG PooledByteBufAllocator:121 - -Dio.netty.allocator.smallCacheSize: 256
+2017-01-12 09:04:21 DEBUG PooledByteBufAllocator:122 - -Dio.netty.allocator.normalCacheSize: 64
+2017-01-12 09:04:21 DEBUG PooledByteBufAllocator:123 - -Dio.netty.allocator.maxCachedBufferCapacity: 32768
+2017-01-12 09:04:21 DEBUG PooledByteBufAllocator:124 - -Dio.netty.allocator.cacheTrimInterval: 8192
+2017-01-12 09:04:21 DEBUG ByteBufUtil:80 - -Dio.netty.allocator.type: pooled
+2017-01-12 09:04:21 DEBUG ByteBufUtil:89 - -Dio.netty.threadLocalDirectBufferSize: 65536
+2017-01-12 09:04:21 DEBUG ByteBufUtil:92 - -Dio.netty.maxThreadLocalCharBufferSize: 16384
+2017-01-12 09:04:21 INFO  WebSocketServer:46 - webSocket服务启动18084
+2017-01-12 09:04:27 INFO  GameServiceMain:149 - 配置文件加载成功
+2017-01-12 09:04:28 INFO  ProtocolClient:68 - 服务启动
+2017-01-12 09:04:28 DEBUG InternalLoggerFactory:59 - Using Log4J as the default logging framework
+2017-01-12 09:04:28 DEBUG MultithreadEventLoopGroup:43 - -Dio.netty.eventLoopThreads: 8
+2017-01-12 09:04:28 DEBUG PlatformDependent0:87 - java.nio.Buffer.address: available
+2017-01-12 09:04:28 DEBUG PlatformDependent0:123 - sun.misc.Unsafe.theUnsafe: available
+2017-01-12 09:04:28 DEBUG PlatformDependent0:147 - sun.misc.Unsafe.copyMemory: available
+2017-01-12 09:04:28 DEBUG PlatformDependent0:194 - direct buffer constructor: available
+2017-01-12 09:04:28 DEBUG PlatformDependent0:243 - java.nio.Bits.unaligned: available, true
+2017-01-12 09:04:28 DEBUG PlatformDependent0:255 - java.nio.DirectByteBuffer.<init>(long, int): available
+2017-01-12 09:04:28 DEBUG Cleaner0:67 - java.nio.ByteBuffer.cleaner(): available
+2017-01-12 09:04:28 DEBUG PlatformDependent:972 - Platform: Windows
+2017-01-12 09:04:28 DEBUG PlatformDependent:1079 - Java version: 7
+2017-01-12 09:04:28 DEBUG PlatformDependent:1116 - -Dio.netty.noUnsafe: false
+2017-01-12 09:04:28 DEBUG PlatformDependent:1151 - sun.misc.Unsafe: available
+2017-01-12 09:04:28 DEBUG PlatformDependent:1226 - -Dio.netty.noJavassist: false
+2017-01-12 09:04:28 DEBUG PlatformDependent:1239 - Javassist: unavailable
+2017-01-12 09:04:28 DEBUG PlatformDependent:1240 - You don't have Javassist in your class path or you don't have enough permission to load dynamically generated classes.  Please check the configuration for better performance.
+2017-01-12 09:04:28 DEBUG PlatformDependent:1258 - -Dio.netty.tmpdir: C:\Users\ADMINI~1\AppData\Local\Temp (java.io.tmpdir)
+2017-01-12 09:04:28 DEBUG PlatformDependent:1337 - -Dio.netty.bitMode: 64 (sun.arch.data.model)
+2017-01-12 09:04:28 DEBUG PlatformDependent:118 - -Dio.netty.noPreferDirect: false
+2017-01-12 09:04:28 DEBUG PlatformDependent:154 - io.netty.maxDirectMemory: 1886388224 bytes
+2017-01-12 09:04:28 DEBUG NioEventLoop:111 - -Dio.netty.noKeySetOptimization: false
+2017-01-12 09:04:28 DEBUG NioEventLoop:112 - -Dio.netty.selectorAutoRebuildThreshold: 512
+2017-01-12 09:04:28 DEBUG PlatformDependent:870 - org.jctools-core.MpscChunkedArrayQueue: available
+2017-01-12 09:04:28 DEBUG DefaultChannelId:86 - -Dio.netty.processId: 1716 (auto-detected)
+2017-01-12 09:04:28 DEBUG NetUtil:135 - -Djava.net.preferIPv4Stack: false
+2017-01-12 09:04:28 DEBUG NetUtil:136 - -Djava.net.preferIPv6Addresses: false
+2017-01-12 09:04:28 DEBUG NetUtil:217 - Loopback interface: lo (Software Loopback Interface 1, 127.0.0.1)
+2017-01-12 09:04:28 DEBUG NetUtil:268 - \proc\sys\net\core\somaxconn: 200 (non-existent)
+2017-01-12 09:04:28 DEBUG DefaultChannelId:106 - -Dio.netty.machineId: 00:00:00:00:00:00:00:e0 (auto-detected)
+2017-01-12 09:04:28 DEBUG ThreadLocalRandom:226 - -Dio.netty.initialSeedUniquifier: 0x80bb9199f7d73894
+2017-01-12 09:04:28 DEBUG ResourceLeakDetector:106 - -Dio.netty.leakDetection.level: simple
+2017-01-12 09:04:28 DEBUG ResourceLeakDetector:107 - -Dio.netty.leakDetection.maxRecords: 4
+2017-01-12 09:04:28 DEBUG PooledByteBufAllocator:107 - -Dio.netty.allocator.numHeapArenas: 8
+2017-01-12 09:04:28 DEBUG PooledByteBufAllocator:108 - -Dio.netty.allocator.numDirectArenas: 8
+2017-01-12 09:04:28 DEBUG PooledByteBufAllocator:110 - -Dio.netty.allocator.pageSize: 8192
+2017-01-12 09:04:28 DEBUG PooledByteBufAllocator:115 - -Dio.netty.allocator.maxOrder: 11
+2017-01-12 09:04:28 DEBUG PooledByteBufAllocator:119 - -Dio.netty.allocator.chunkSize: 16777216
+2017-01-12 09:04:28 DEBUG PooledByteBufAllocator:120 - -Dio.netty.allocator.tinyCacheSize: 512
+2017-01-12 09:04:28 DEBUG PooledByteBufAllocator:121 - -Dio.netty.allocator.smallCacheSize: 256
+2017-01-12 09:04:28 DEBUG PooledByteBufAllocator:122 - -Dio.netty.allocator.normalCacheSize: 64
+2017-01-12 09:04:28 DEBUG PooledByteBufAllocator:123 - -Dio.netty.allocator.maxCachedBufferCapacity: 32768
+2017-01-12 09:04:28 DEBUG PooledByteBufAllocator:124 - -Dio.netty.allocator.cacheTrimInterval: 8192
+2017-01-12 09:04:28 DEBUG ByteBufUtil:80 - -Dio.netty.allocator.type: pooled
+2017-01-12 09:04:28 DEBUG ByteBufUtil:89 - -Dio.netty.threadLocalDirectBufferSize: 65536
+2017-01-12 09:04:28 DEBUG ByteBufUtil:92 - -Dio.netty.maxThreadLocalCharBufferSize: 16384
+2017-01-12 09:04:28 INFO  WebSocketServer:46 - webSocket服务启动18084
+2017-01-12 09:04:28 INFO  ProtocolClient:92 - 已经连接上服务器
+2017-01-12 09:04:28 DEBUG Recycler:96 - -Dio.netty.recycler.maxCapacityPerThread: 32768
+2017-01-12 09:04:28 DEBUG Recycler:97 - -Dio.netty.recycler.maxSharedCapacityFactor: 2
+2017-01-12 09:04:28 DEBUG Recycler:98 - -Dio.netty.recycler.linkCapacity: 16
+2017-01-12 09:04:28 DEBUG Recycler:99 - -Dio.netty.recycler.ratio: 8
+2017-01-12 09:04:28 DEBUG AbstractByteBuf:52 - -Dio.netty.buffer.bytebuf.checkAccessible: true
+2017-01-12 09:04:28 DEBUG ResourceLeakDetectorFactory:140 - Loaded default ResourceLeakDetector: io.netty.util.ResourceLeakDetector@5385af56
+2017-01-12 09:04:28 INFO  ProtocolClientHandler:31 - Server->Client:/127.0.0.1:18083com.gz.websocket.msg.ProtocolMsg@16c8b5a6
+2017-01-12 09:10:02 DEBUG WebSocketServerHandshaker:165 - [id: 0xcbe4751a, L:/192.168.1.83:18084 - R:/192.168.1.72:49532] WebSocket version V13 server handshake
+2017-01-12 09:10:02 DEBUG WebSocketServerHandshaker:136 - WebSocket version 13 server handshake key: LtCMu/x2T8e1ac2F/thZ0g==, response: 2KkvHXa2vtueSV3IggIFRKkh1Y4=
+2017-01-12 09:10:02 DEBUG WebSocket08FrameDecoder:174 - Decoding WebSocket Frame opCode=1
+2017-01-12 09:10:02 DEBUG WebSocket08FrameDecoder:282 - Decoding WebSocket Frame length=90
+2017-01-12 09:10:02 INFO  ProtocolClientHandler:31 - Server->Client:/127.0.0.1:18083com.gz.websocket.msg.ProtocolMsg@6c0037a0
+2017-01-12 09:10:02 DEBUG WebSocket08FrameEncoder:130 - Encoding WebSocket Frame opCode=1 length=163
+2017-01-12 09:10:06 DEBUG WebSocket08FrameDecoder:174 - Decoding WebSocket Frame opCode=1
+2017-01-12 09:10:06 DEBUG WebSocket08FrameDecoder:282 - Decoding WebSocket Frame length=62
+2017-01-12 09:10:06 WARN  GSMsgReceiver:50 - 无法识别的协议:0
+2017-01-12 09:10:06 DEBUG WebSocket08FrameDecoder:174 - Decoding WebSocket Frame opCode=1
+2017-01-12 09:10:06 DEBUG WebSocket08FrameDecoder:282 - Decoding WebSocket Frame length=68
+2017-01-12 09:10:06 WARN  GSMsgReceiver:50 - 无法识别的协议:0
+2017-01-12 09:10:06 DEBUG WebSocket08FrameDecoder:174 - Decoding WebSocket Frame opCode=1
+2017-01-12 09:10:06 DEBUG WebSocket08FrameDecoder:282 - Decoding WebSocket Frame length=26
+2017-01-12 09:10:11 DEBUG WebSocket08FrameDecoder:174 - Decoding WebSocket Frame opCode=8
+2017-01-12 09:10:11 DEBUG WebSocket08FrameDecoder:282 - Decoding WebSocket Frame length=2
+2017-01-12 09:10:11 DEBUG WebSocket08FrameEncoder:130 - Encoding WebSocket Frame opCode=8 length=2
+2017-01-12 09:10:11 INFO  WebSocketServerHandler:83 - 与客户端连接关闭/192.168.1.72:49532

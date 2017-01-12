@@ -1,0 +1,26 @@
+[
+	{"level":1,"minCoin":100,"maxCoin":100000,"betCoin":[
+		{"bet_level":0,"bet":5},
+		{"bet_level":1,"bet":10},
+		{"bet_level":2,"bet":20},
+		{"bet_level":3,"bet":40},
+		{"bet_level":4,"bet":80},
+		{"bet_level":5,"bet":160},
+	]},
+	{"level":2,"minCoin":100001,"maxCoin":10000000,"betCoin":[
+		{"bet_level":0,"bet":500},
+		{"bet_level":1,"bet":1000},
+		{"bet_level":2,"bet":2000},
+		{"bet_level":3,"bet":4000},
+		{"bet_level":4,"bet":8000},
+		{"bet_level":5,"bet":16000},
+	]},
+	{"level":3,"minCoin":10000001,"maxCoin":99999999999,"betCoin":[
+		{"bet_level":0,"bet":50000},
+		{"bet_level":1,"bet":100000},
+		{"bet_level":2,"bet":200000},
+		{"bet_level":3,"bet":400000},
+		{"bet_level":4,"bet":800000},
+		{"bet_level":5,"bet":1600000},
+	]}
+]

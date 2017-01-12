@@ -1,0 +1,5 @@
+[
+{"id":1,"bet_money":100,"user_money":100,"probobality_base":10000},
+{"id":2,"bet_money":1000,"user_money":100000,"probobality_base":10000},
+{"id":3,"bet_money":10000,"user_money":1000000,"probobality_base":10000}
+]
