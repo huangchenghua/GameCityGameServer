@@ -17,7 +17,6 @@ public class AllTemplate {
 	//加载XXX配置表
 	//----------------------系统配置表-------------------------------
 	private static JSONArray system_login_announce_jsonArray = new JSONArray();//登录公告
-	private static JSONArray hall_gift_jsonArray = new JSONArray();//赠送礼物
 	private static JSONArray hall_vipLever_infoArray = new JSONArray();//vip等级信息
 	
 	//----------------------游戏配置表-------------------------------
@@ -43,6 +42,9 @@ public class AllTemplate {
 	private static JSONArray fruit_odds = new JSONArray();
 	private static JSONArray shop_config = new JSONArray();
 	private static JSONArray gift_config = new JSONArray();
+	private static JSONArray sign_config = new JSONArray();
+	private static JSONArray exp_config = new JSONArray();
+	private static JSONArray heads_config = new JSONArray();
 
 	
 	
@@ -66,7 +68,6 @@ public class AllTemplate {
 		laba_probobality2_jsonArray = JsonFileRead.getInstance().readJsonArray(PATH+"LaBa_probobality2.json");
 
 		system_login_announce_jsonArray = JsonFileRead.getInstance().readJsonArray(PATH+"system_login_announce.json");
-		hall_gift_jsonArray = JsonFileRead.getInstance().readJsonArray(PATH+"hall_gift.json");
 		hall_vipLever_infoArray = JsonFileRead.getInstance().readJsonArray(PATH+"hall_vipLever_Info.json");
 		niuniu_level_jsonArray = JsonFileRead.getInstance().readJsonArray(PATH+"niuniu_level.json");
 		niuniu_probobality1 = JsonFileRead.getInstance().readJsonArray(PATH+"niuniu_probobality1.json");
@@ -79,8 +80,10 @@ public class AllTemplate {
 		texas_level_jsonArray = JsonFileRead.getInstance().readJsonArray(PATH + "texas_level.json");
 		shop_config = JsonFileRead.getInstance().readJsonArray(PATH + "shop_config.json");
 		gift_config = JsonFileRead.getInstance().readJsonArray(PATH + "gift_config.json");
+		sign_config = JsonFileRead.getInstance().readJsonArray(PATH + "sign.json");
+		exp_config = JsonFileRead.getInstance().readJsonArray(PATH + "exp.json");
+		heads_config = JsonFileRead.getInstance().readJsonArray(PATH + "heads.json");
 		
-		System.out.println("hall_gift_jsonArray   is : " + hall_gift_jsonArray);
 
 //		System.out.println("   is : "  + fruit_special_jsonArray);
 //		System.out.println("   is : " + system_login_announce_jsonArray);
@@ -95,6 +98,21 @@ public class AllTemplate {
 	}
 	
 	
+	public static JSONArray getHeads_config() {
+		return heads_config;
+	}
+
+
+	public static JSONArray getExp_config() {
+		return exp_config;
+	}
+
+
+	public static JSONArray getSign_config() {
+		return sign_config;
+	}
+
+
 	public static JSONArray getFruit_odds() {
 		return fruit_odds;
 	}
@@ -107,13 +125,15 @@ public class AllTemplate {
 	
 	
 	
+	public static JSONArray getGift_config() {
+		return gift_config;
+	}
+
+
 	public static JSONArray getHall_vipLever_infoArray() {
 		return hall_vipLever_infoArray;
 	}
 
-	public static JSONArray getHall_gift_jsonArray() {
-		return hall_gift_jsonArray;
-	}
 
 	public static JSONArray getLaba_level_jsonArray(){
 		return laba_level_jsonArray;

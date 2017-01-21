@@ -21,8 +21,7 @@ public class PlayerManager {
 	private ConcurrentHashMap<String,Player> onlinePlayers;
 
 	private DelayCache<String, Player> loginCache;
-	
-	
+
 	public static synchronized PlayerManager getInstance() {
 		if(instance==null)
 			instance=new PlayerManager();
@@ -82,7 +81,7 @@ public class PlayerManager {
 	}
 	
 	
-	public static void bingPlayer(BaseMsg msg,Player player){
+	public static void bindPlayer(BaseMsg msg,Player player){
 		Attribute<Player> att= msg.getChannel().attr(Player.NETTY_CHANNEL_KEY);
 		att.set(player);
 	}

@@ -16,6 +16,7 @@ import com.gz.websocket.msg.ClientMsg;
 public class LuckyWheelTable extends GameTable{
 	private HashMap<String, Long> player_bet=new HashMap<>();
 	private HashMap<String, Long> player_bet2=new HashMap<>();
+	private static final int exp = 2;
 	public LuckyWheelTable(Room room) {
 		super(room);
 	}
@@ -77,6 +78,7 @@ public class LuckyWheelTable extends GameTable{
 		}
 		PlayerMsgSender.getInstance().addMsg(cMsg);
 		PlayerDataService.getInstance().modifyCoin(player,reward-bet,EventLogType.luckywheel_bet);
+		PlayerDataService.getInstance().addExp(player,exp);
 	}
 	public void putBet(Player player,long bet)
 	{

@@ -2,15 +2,20 @@ package com.gz.gamecity.gameserver.service.common;
 
 import java.util.UUID;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gz.gamecity.bean.EventLogType;
 import com.gz.gamecity.bean.Player;
 import com.gz.gamecity.gameserver.LoginMsgSender;
 import com.gz.gamecity.gameserver.PlayerManager;
 import com.gz.gamecity.gameserver.PlayerMsgSender;
+import com.gz.gamecity.gameserver.config.AllTemplate;
+import com.gz.gamecity.gameserver.config.ConfigField;
 import com.gz.gamecity.gameserver.service.LogicHandler;
 import com.gz.gamecity.gameserver.service.db.DBService;
 import com.gz.gamecity.protocol.Protocols;
+import com.gz.gamecity.protocol.Protocols.G2c_player_refresh;
+import com.gz.util.Config;
 import com.gz.websocket.msg.BaseMsg;
 import com.gz.websocket.msg.ClientMsg;
 import com.gz.websocket.msg.ProtocolMsg;
@@ -108,14 +113,18 @@ public class PlayerDataService implements LogicHandler {
 			}
 		}
 		PlayerMsgSender.getInstance().addMsg(msg);
+		refreshPlayerData(player);
+		
+		LoginMsgSender.getInstance().addMsg(pMsg);
+	}
+	
+	public void refreshPlayerData(Player player){
 		ClientMsg msg_data=new ClientMsg();
 		msg_data.setJson(getPlayerDataJson(player));
 		msg_data.put(Protocols.MAINCODE, Protocols.G2c_player_refresh.mainCode_value);
-		msg.put(Protocols.SUBCODE, Protocols.G2c_player_refresh.subCode_value);
-		msg.setChannel(player.getChannel());
+		msg_data.put(Protocols.SUBCODE, Protocols.G2c_player_refresh.subCode_value);
+		msg_data.setChannel(player.getChannel());
 		PlayerMsgSender.getInstance().addMsg(msg_data);
-		
-		LoginMsgSender.getInstance().addMsg(pMsg);
 	}
 
 	private boolean checkSex(byte sex) {
@@ -156,6 +165,8 @@ public class PlayerDataService implements LogicHandler {
 		if(result<0){
 			player.setCoin(0);
 		}else{
+			if(result>Config.instance().getLValue(ConfigField.MAX_COIN))
+				result = Config.instance().getLValue(ConfigField.MAX_COIN);
 			player.setCoin(result);
 		}
 		
@@ -173,6 +184,7 @@ public class PlayerDataService implements LogicHandler {
 		pMsg.put(Protocols.G2l_coinChange.UUID, player.getUuid());
 		pMsg.put(Protocols.G2l_coinChange.COIN, player.getCoin());
 		pMsg.put(Protocols.G2l_coinChange.CHANGE, change);
+		pMsg.put(Protocols.G2l_coinChange.TYPE, type.getType());
 		LoginMsgSender.getInstance().addMsg(pMsg);
 		
 		JSONObject j =new JSONObject();
@@ -213,9 +225,71 @@ public class PlayerDataService implements LogicHandler {
 		j.put(Protocols.G2c_player_refresh.CHARGE_TOTAL, player.getCharge_total());
 		j.put(Protocols.G2c_player_refresh.SIGN, player.getSign());
 		j.put(Protocols.G2c_player_refresh.LVL, player.getLvl());
+		j.put(Protocols.G2c_player_refresh.EXP, player.getExp());
 		j.put(Protocols.G2c_player_refresh.VIP, player.getVip());
 		j.put(Protocols.G2c_player_refresh.FINANCE, player.getFinance());
+		j.put(Protocols.G2c_player_refresh.FROZEN, player.isFrozen());
+		j.put(Protocols.G2c_player_refresh.SILENT, player.isSilent());
+		j.put(Protocols.G2c_player_refresh.LASTSIGNDATE, player.getLastSignDate());
+		j.put(Protocols.G2c_player_refresh.SIGNDAYS, player.getSignDays());
+		j.put(Protocols.G2c_player_refresh.SIGNED, player.isSigned());
+		j.put(Protocols.G2c_player_refresh.HEADS, player.getHeads());
 		return j;
 	}
 	
+	public void changeCharm(Player player,int change){
+		player.setCharm( player.getCharm()+change);
+		ClientMsg msg_data=new ClientMsg();
+		msg_data.setJson(getPlayerDataJson(player));
+		msg_data.put(Protocols.MAINCODE, Protocols.G2c_player_refresh.mainCode_value);
+		msg_data.put(Protocols.SUBCODE, Protocols.G2c_player_refresh.subCode_value);
+		msg_data.setChannel(player.getChannel());
+		PlayerMsgSender.getInstance().addMsg(msg_data);
+		
+		ProtocolMsg pMsg=new ProtocolMsg();
+		pMsg.put(Protocols.MAINCODE, Protocols.G2l_data_change.mainCode_value);
+		pMsg.put(Protocols.SUBCODE, Protocols.G2l_data_change.subCode_value);
+		pMsg.put(Protocols.G2l_data_change.UUID, player.getUuid());
+		pMsg.put(Protocols.G2l_data_change.CHARM, player.getCharm());
+		LoginMsgSender.getInstance().addMsg(pMsg);
+	}
+	
+	public void addExp(Player player,int exp){
+		int lvl = player.getLvl();
+		player.setExp(player.getExp()+exp);
+		JSONArray exp_config = AllTemplate.getExp_config();
+		for (int i = 0; i < exp_config.size(); i++) {
+			JSONObject j = exp_config.getJSONObject(i);
+			int _lvl = j.getIntValue("lvl");
+			int _exp = j.getIntValue("exp");
+			if(player.getExp()>=_exp){
+				if(_lvl!=lvl){
+					player.setLvl(_lvl);
+				}
+				break;
+			}
+		}
+		refreshPlayerData(player);
+		ProtocolMsg pMsg=new ProtocolMsg();
+		pMsg.put(Protocols.MAINCODE, Protocols.G2l_data_change.mainCode_value);
+		pMsg.put(Protocols.SUBCODE, Protocols.G2l_data_change.subCode_value);
+		pMsg.put(Protocols.G2l_data_change.UUID, player.getUuid());
+		pMsg.put(Protocols.G2l_data_change.LVL, player.getLvl());
+		pMsg.put(Protocols.G2l_data_change.EXP, player.getExp());
+		LoginMsgSender.getInstance().addMsg(pMsg);
+	}
+	
+	public void addHead(Player player, int head) {
+		int[] newheads = new int[player.getHeads().length + 1];
+		System.arraycopy(player.getHeads(), 0, newheads, 0, player.getHeads().length);
+		newheads[newheads.length - 1] = head;
+		player.setHeads(newheads);
+		ProtocolMsg pMsg=new ProtocolMsg();
+		pMsg.put(Protocols.MAINCODE, Protocols.G2l_data_change.mainCode_value);
+		pMsg.put(Protocols.SUBCODE, Protocols.G2l_data_change.subCode_value);
+		pMsg.put(Protocols.G2l_data_change.UUID, player.getUuid());
+		pMsg.put(Protocols.G2l_data_change.HEADS, player.getHeads());
+		LoginMsgSender.getInstance().addMsg(pMsg);
+		refreshPlayerData(player);
+	}
 }

@@ -1,5 +1,6 @@
 package com.gz.gamecity.gameserver.service.common;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gz.gamecity.bean.Player;
 import com.gz.gamecity.gameserver.PlayerManager;
@@ -60,10 +61,24 @@ public class PlayerVerifyService implements LogicHandler {
 				player.setCharge_total(j.getIntValue(Protocols.L2g_playerVerify.CHARGE_TOTAL));
 				player.setSex(j.getByteValue(Protocols.L2g_playerVerify.SEX));
 				player.setLvl(j.getIntValue(Protocols.L2g_playerVerify.LVL));
+				player.setExp(j.getIntValue(Protocols.L2g_playerVerify.EXP));
 				player.setCharm(j.getIntValue(Protocols.L2g_playerVerify.CHARM));
 				player.setFinance(j.getIntValue(Protocols.L2g_playerVerify.FINANCE));
 				player.setHead(j.getIntValue(Protocols.L2g_playerVerify.HEAD));
 				player.setSign(j.getString(Protocols.L2g_playerVerify.SIGN));
+				player.setFrozen(j.getBooleanValue(Protocols.L2g_playerVerify.FROZEN));
+				player.setSilent(j.getBooleanValue(Protocols.L2g_playerVerify.SILENT));
+				player.setLastSignDate(j.getString(Protocols.L2g_playerVerify.LASTSIGNDATE));
+				player.setSignDays(j.getIntValue(Protocols.L2g_playerVerify.SIGNDAYS));
+				player.setSigned(j.getBooleanValue(Protocols.L2g_playerVerify.SIGNED));
+				player.setAlmsCnt(j.getByteValue(Protocols.L2g_playerVerify.ALMS_CNT));
+				player.setAlmsTime(j.getString(Protocols.L2g_playerVerify.ALMS_TIME));
+				JSONArray arr = j.getJSONArray("heads");
+				int[] heads = new int[arr.size()];
+				for(int i=0;i<heads.length;i++){
+					heads[i] = arr.getIntValue(i);
+				}
+				player.setHeads(heads);
 				PlayerManager.getInstance().playerOnline(player);
 			}
 			
@@ -74,11 +89,17 @@ public class PlayerVerifyService implements LogicHandler {
 			cMsg.put(Protocols.G2c_login.CHARGE_TOTAL, player.getCharge_total());
 			cMsg.put(Protocols.G2c_login.SEX, player.getSex());
 			cMsg.put(Protocols.G2c_login.LVL, player.getLvl());
+			cMsg.put(Protocols.G2c_login.EXP, player.getExp());
 			cMsg.put(Protocols.G2c_login.CHARM, player.getCharm());
 			cMsg.put(Protocols.G2c_login.FINANCE, player.getFinance());
 			cMsg.put(Protocols.G2c_login.HEAD, player.getHead());
 			cMsg.put(Protocols.G2c_login.SIGN, player.getSign());
 			cMsg.put(Protocols.G2c_login.TIMESTAMP, System.currentTimeMillis());
+			cMsg.put(Protocols.G2c_login.FROZEN, player.isFrozen());
+			cMsg.put(Protocols.G2c_login.SILENT, player.isSilent());
+			cMsg.put(Protocols.G2c_login.LASTSIGNDATE, player.getLastSignDate());
+			cMsg.put(Protocols.G2c_login.SIGNDAYS, player.getSignDays());
+			cMsg.put(Protocols.G2c_login.HEADS, player.getHeads());
 			PlayerMsgSender.getInstance().addMsg(cMsg);
 			
 		}

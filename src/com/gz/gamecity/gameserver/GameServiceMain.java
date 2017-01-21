@@ -5,15 +5,16 @@ import javax.naming.NameNotFoundException;
 import org.apache.log4j.Logger;
 
 import com.gz.dbpools.ConnectionFactory;
+import com.gz.gamecity.delay.InnerDelayManager;
 import com.gz.gamecity.gameserver.config.AllTemplate;
 import com.gz.gamecity.gameserver.config.ConfigField;
-import com.gz.gamecity.gameserver.db.PlayerDao;
-import com.gz.gamecity.gameserver.delay.InnerDelayManager;
 import com.gz.gamecity.gameserver.handler.impl.PlayerMsgHandler;
 import com.gz.gamecity.gameserver.service.common.ChatService;
+import com.gz.gamecity.gameserver.service.common.FriendHandler;
 import com.gz.gamecity.gameserver.service.common.HallService;
 import com.gz.gamecity.gameserver.service.common.HeartService;
 import com.gz.gamecity.gameserver.service.common.LoginServerService;
+import com.gz.gamecity.gameserver.service.common.MailService;
 import com.gz.gamecity.gameserver.service.common.PlayerDataLoginService;
 import com.gz.gamecity.gameserver.service.common.PlayerDataService;
 import com.gz.gamecity.gameserver.service.common.PlayerLoginService;
@@ -26,10 +27,8 @@ import com.gz.gamecity.gameserver.service.single.BlackAService;
 import com.gz.gamecity.gameserver.service.single.LabaService;
 import com.gz.gamecity.gameserver.service.single.LuckyWheelService;
 import com.gz.gamecity.gameserver.service.single.MahjongService;
-import com.gz.gamecity.protocol.Protocols;
 import com.gz.util.Config;
 import com.gz.util.SensitivewordFilter;
-import com.gz.websocket.protocol.client.ProtocolClient;
 import com.gz.websocket.server.WebSocketServer;
 
 
@@ -130,6 +129,10 @@ public class GameServiceMain {
 
 		GSMsgReceiver.getInstance().registHandler(new ChatService());
 		GSMsgReceiver.getInstance().registHandler(new TexasHandler());
+		GSMsgReceiver.getInstance().registHandler(new FriendHandler());
+		
+		GSMsgReceiver.getInstance().registHandler(MailService.getInstance());
+
 		GSMsgReceiver.getInstance().start();
 	}
 

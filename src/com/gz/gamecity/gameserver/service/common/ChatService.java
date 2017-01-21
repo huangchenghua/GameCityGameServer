@@ -32,6 +32,12 @@ public class ChatService implements LogicHandler{
 	}
 
 	private void handleChatMsg(Player player, ClientMsg cMsg) {
+		if(!player.isSilent())
+		{
+			cMsg.put(Protocols.ERRORCODE, "已经被禁言了");
+			PlayerMsgSender.getInstance().addMsg(cMsg);
+			return;
+		}
 		if(!allowedSend(player)){
 			return;
 		}
@@ -63,6 +69,7 @@ public class ChatService implements LogicHandler{
 	
 	private boolean allowedSend(Player player){
 		// TODO 判断是否可以发送，主要是扣钱之类的
+		
 		return true;
 	}
 

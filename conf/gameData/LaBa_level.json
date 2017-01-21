@@ -15,7 +15,7 @@
 		{"bet_level":4,"bet":8000},
 		{"bet_level":5,"bet":16000},
 	]},
-	{"level":3,"minCoin":10000001,"maxCoin":99999999999,"betCoin":[
+	{"level":3,"minCoin":10000001,"maxCoin":999999999999,"betCoin":[
 		{"bet_level":0,"bet":50000},
 		{"bet_level":1,"bet":100000},
 		{"bet_level":2,"bet":200000},

@@ -216,7 +216,7 @@ public class MahjongTable extends GameTable{
 				}
 			}
 		}
-		
+		PlayerDataService.getInstance().addExp(player, 2);
 		cMsg.put(Protocols.SUBCODE,Protocols.G2c_mahjong_bet.subCode_value);
 		PlayerMsgSender.getInstance().addMsg(cMsg);
 	}

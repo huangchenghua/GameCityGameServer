@@ -26,7 +26,6 @@ import com.gz.websocket.msg.ClientMsg;
 
 import io.netty.handler.ssl.ApplicationProtocolConfig.Protocol;
 
-
 public class TexasHandler implements LogicHandler {
 
 	public static final Logger log = Logger.getLogger(TexasHandler.class);
@@ -68,6 +67,14 @@ public class TexasHandler implements LogicHandler {
 			HandleLeaveRoom(player, clientMsg);
 			break;
 			
+		case Protocols.C2g_texas_levae_table.subCode_value :
+			HandleLeaveTable(player, clientMsg);
+			break;
+		
+		case Protocols.C2g_texas_show_card.subCode_value :
+			HandleShowCard(player, clientMsg);
+			break;
+			
 		case Protocols.Inner_game_texas_start.subCode_value :
 			HandleGameStart(clientMsg);
 			break;
@@ -76,6 +83,7 @@ public class TexasHandler implements LogicHandler {
 			HandlePlayerAction(clientMsg);
 			break;
 			
+
 		default :
 			log.error("not find subCode: " + subCode);
 
@@ -88,11 +96,24 @@ public class TexasHandler implements LogicHandler {
 		return Protocols.MainCode.TEXAS;
 	}
 	
+	private void HandleShowCard(Player player, ClientMsg clientMsg) {
+		TexasRoom room = (TexasRoom)RoomManager.getInstance().getRoom(RoomType.Texas);
+		TexasTable table = (TexasTable)room.getTable(player.getTableId());
+		if (table == null) {
+			log.debug("texas not find table[uuid=" + player.getUuid() + " tableId=" + player.getTableId() + "]");
+			return ;
+		}
+		
+		boolean bIsShow = clientMsg.getJson().getBooleanValue(Protocols.C2g_texas_show_card.IS_SHOW);
+
+		
+		table.showCard(player, bIsShow);
+	}
+	
 	private void HandleLeaveTable(Player player,  ClientMsg clientMsg) {
 		//String strTableId = clientMsg.getJson().getString(Protocols.Inner_game_texas_player_action.TABLEID);
 		
 		Room room = RoomManager.getInstance().getRoom(RoomType.Texas);
-		room.playerLeave(player);
 	
 		GameTable t = room.getTable(player.getTableId());
 
@@ -158,7 +179,10 @@ public class TexasHandler implements LogicHandler {
 		long nBet = clientMsg.getJson().getLongValue("bet");
 		TexasRoom room = (TexasRoom)RoomManager.getInstance().getRoom(RoomType.Texas);
 		TexasTable table = (TexasTable)room.getTable(player.getTableId());
-		
+		if (table == null) {
+			log.error("not find texas table [table_id=" + player.getTableId() + "]");
+			return ;
+		}
 		table.playerAction(player, nActionType, nBet);
 	}
 	
@@ -176,6 +200,8 @@ public class TexasHandler implements LogicHandler {
 		PlayerMsgSender.getInstance().addMsg(clientMsg);
 		
 		log.info("enter texas room [uuid=" + player.getUuid() + "]");
+		
+		
 	}
 	
 	private void HandleChooseLv(Player player, ClientMsg clientMsg) {		
@@ -216,8 +242,7 @@ public class TexasHandler implements LogicHandler {
 			}
 		}
 		
-		PlayerMsgSender.getInstance().addMsg(clientMsg);
-		
+		//PlayerMsgSender.getInstance().addMsg(clientMsg);
 		TexasRoom room = (TexasRoom)RoomManager.getInstance().getRoom(RoomType.Texas);
 		TexasTable table = room.findTableNotFullByLv(nChooseLv);
 		
@@ -226,11 +251,19 @@ public class TexasHandler implements LogicHandler {
 			table.setJSONData(json_config);
 		}
 		
+		if (table.canSitDown(player) == false) {
+			clientMsg.put(Protocols.ERRORCODE,"进入条件不满足");
+			PlayerMsgSender.getInstance().addMsg(clientMsg);
+			return;
+		}
+		
+		table.sendTableLvMsg(player, false);
 		if (!table.playerSitDown(player)) {
 			clientMsg.put(Protocols.ERRORCODE,"条件不满足");
 			PlayerMsgSender.getInstance().addMsg(clientMsg);
 			return;
 		}
+		
 		
 		room.addTable(table);
 

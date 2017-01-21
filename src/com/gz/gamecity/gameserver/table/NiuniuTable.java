@@ -14,22 +14,26 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gz.gamecity.bean.EventLogType;
 import com.gz.gamecity.bean.Player;
+import com.gz.gamecity.delay.DelayMsg;
+import com.gz.gamecity.delay.InnerDelayManager;
 import com.gz.gamecity.gameserver.GSMsgReceiver;
 import com.gz.gamecity.gameserver.PlayerMsgSender;
 import com.gz.gamecity.gameserver.config.AllTemplate;
-import com.gz.gamecity.gameserver.delay.DelayMsg;
-import com.gz.gamecity.gameserver.delay.InnerDelayManager;
+import com.gz.gamecity.gameserver.config.ConfigField;
 import com.gz.gamecity.gameserver.room.Room;
 import com.gz.gamecity.gameserver.service.common.PlayerDataService;
 import com.gz.gamecity.gameserver.service.niuniu.NiuniuPoker;
 import com.gz.gamecity.gameserver.service.niuniu.PokerCommon;
 import com.gz.gamecity.gameserver.service.niuniu.Utils;
 import com.gz.gamecity.protocol.Protocols;
+import com.gz.util.Config;
 import com.gz.util.JsonUtil;
 import com.gz.websocket.msg.ClientMsg;
 
 
 public class NiuniuTable extends GameTable {
+	
+	private static final int exp = 8;
 
 	private static final Logger log=Logger.getLogger(NiuniuTable.class);
 	
@@ -42,8 +46,7 @@ public class NiuniuTable extends GameTable {
 	/**
 	 * 可以下注的时间
 	 */
-//	private static final long time_bet = (long) (15*1000l);
-	private static final long time_bet = (long) (5*60*1000l);
+	private static final long time_bet = Config.instance().getLValue(ConfigField.NIUNIU_TIME_BET);
 	
 	/**
 	 * 结算后开下一局的时间
@@ -157,8 +160,6 @@ public class NiuniuTable extends GameTable {
 			return true;
 		return false;
 	}
-	
-	
 	
 	
 	@Override
@@ -438,10 +439,22 @@ public class NiuniuTable extends GameTable {
 		dealCards();
 		sendResult();
 		settlement();
-		
+		addExp();
 		gameEnd();
 	}
 	
+	private void addExp() {
+		for(String uuid:bets_player.keySet()){
+			Player player = players.get(uuid);
+			if(player!=null){
+				PlayerDataService.getInstance().addExp(player, exp);
+			}
+		}
+		if(banker!=banker_system){
+			PlayerDataService.getInstance().addExp(banker, exp);
+		}
+	}
+
 	private void sendResult() {
 		ClientMsg msg = new ClientMsg();
 		msg.put(Protocols.MAINCODE, Protocols.G2c_niuniu_result.mainCode_value);

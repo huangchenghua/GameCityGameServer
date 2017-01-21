@@ -9,11 +9,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gz.gamecity.bean.EventLogType;
 import com.gz.gamecity.bean.Player;
+import com.gz.gamecity.delay.DelayMsg;
+import com.gz.gamecity.delay.InnerDelayManager;
 import com.gz.gamecity.gameserver.GSMsgReceiver;
 import com.gz.gamecity.gameserver.PlayerMsgSender;
 import com.gz.gamecity.gameserver.config.AllTemplate;
-import com.gz.gamecity.gameserver.delay.DelayMsg;
-import com.gz.gamecity.gameserver.delay.InnerDelayManager;
 import com.gz.gamecity.gameserver.room.Room;
 import com.gz.gamecity.gameserver.service.common.PlayerDataService;
 import com.gz.gamecity.protocol.Protocols;
@@ -42,6 +42,8 @@ public class FruitTable extends GameTable{
 	private ArrayList<Integer> list_result=new ArrayList<>();
 	
 	private long remain=0l;
+	
+	private static final int exp = 3;
 	
 	private Pool pool=new Pool();
 	
@@ -196,6 +198,7 @@ public class FruitTable extends GameTable{
 			handleResult();
 			sendResult();
 			settlement();
+			addExp();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -203,6 +206,15 @@ public class FruitTable extends GameTable{
 		gameEnd();
 	}
 	
+	private void addExp() {
+		for(String uuid:bets_player.keySet()){
+			Player player = players.get(uuid);
+			if(player!=null){
+				PlayerDataService.getInstance().addExp(player, exp);
+			}
+		}
+	}
+
 	private void settlement() {
 		JSONArray json_odds_arr = AllTemplate.getFruit_odds();
 		int index = list_result.get(list_result.size()-1);

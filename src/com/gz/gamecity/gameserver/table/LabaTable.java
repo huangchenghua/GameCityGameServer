@@ -51,8 +51,10 @@ public class LabaTable extends GameTable{
 		//  这里判断一下玩家是否有筹码还没有收取，需要返还筹码
 		Player player = players.get(uuid);
 		if(player!=null){
-			long bet = player_bet2.get(uuid);
-			PlayerDataService.getInstance().modifyCoin(player,bet,EventLogType.laba_checkout);
+			if(player_bet2.get(uuid)!=null){
+				long bet = player_bet2.get(uuid);
+				PlayerDataService.getInstance().modifyCoin(player,bet,EventLogType.laba_checkout);
+			}
 		}
 		super.playerLeave(uuid);
 	}
@@ -106,6 +108,7 @@ public class LabaTable extends GameTable{
 		cMsg.put("option",option);
 		cMsg.put("star", star);
 	
+		PlayerDataService.getInstance().addExp(player, 2);
 		PlayerMsgSender.getInstance().addMsg(cMsg);
 	}
 	
@@ -144,6 +147,7 @@ public class LabaTable extends GameTable{
 		cMsg.put("option", option);
 		cMsg.put("reward", reward);
 		
+		PlayerDataService.getInstance().addExp(player, 2);
 		PlayerMsgSender.getInstance().addMsg(cMsg);
 	}
 
@@ -157,7 +161,7 @@ public class LabaTable extends GameTable{
 		
 		for(int i=0;i<labaLevel.size();i++){
 			JSONObject labaLevelObj=(JSONObject)labaLevel.get(i);
-			if(player.getCoin()>=Integer.parseInt(labaLevelObj.getString("minCoin"))&&player.getCoin()<=Integer.parseInt(labaLevelObj.getString("maxCoin"))){
+			if(player.getCoin()>=Long.parseLong(labaLevelObj.getString("minCoin"))&&player.getCoin()<=Long.parseLong(labaLevelObj.getString("maxCoin"))){
 				JSONArray coinLevel = (JSONArray)labaLevelObj.getJSONArray("betCoin");
 				for(int j=0;j<coinLevel.size();j++){
 					JSONObject coinLevelObj = (JSONObject)coinLevel.get(j);

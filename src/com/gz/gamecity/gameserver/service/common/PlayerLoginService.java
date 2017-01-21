@@ -80,7 +80,7 @@ public class PlayerLoginService implements LogicHandler {
 		player.setCoin(coin);
 		player.setOnline(true);
 		PlayerManager.getInstance().playerOnline(player);
-		PlayerManager.bingPlayer(cMsg, player);
+		PlayerManager.bindPlayer(cMsg, player);
 		cMsg.put(Protocols.SUBCODE, Protocols.G2c_login.subCode_value);
 		cMsg.put(Protocols.G2c_login.NAME, player.getName());
 		cMsg.put(Protocols.G2c_login.COIN, player.getCoin());
@@ -125,7 +125,7 @@ public class PlayerLoginService implements LogicHandler {
 		player.setGameToken(gameToken);
 		player.setOnline(true);
 		PlayerManager.getInstance().playerLogin(player);
-		PlayerManager.bingPlayer(cMsg, player);
+		PlayerManager.bindPlayer(cMsg, player);
 //		Attribute<Player> att= cMsg.getChannel().attr(Player.NETTY_CHANNEL_KEY);
 //		att.setIfAbsent(player);
 //		map_loginPlayer.put(uuid, player);

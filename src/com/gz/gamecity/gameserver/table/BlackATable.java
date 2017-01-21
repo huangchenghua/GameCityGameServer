@@ -18,6 +18,7 @@ public class BlackATable extends GameTable{
 	public HashMap<String, Long> player_bet=new HashMap<>();
 	public HashMap<String, Long> player_reward=new HashMap<>();
 	public HashMap<String, Integer> player_star=new HashMap<>();
+	private static final int exp = 2;
 	public BlackATable(Room room) {
 		super(room);
 	}
@@ -87,6 +88,7 @@ public class BlackATable extends GameTable{
 					//star=0;
 					long pbet=player_bet.get(player.getUuid());
 					PlayerDataService.getInstance().modifyCoin(player, -pbet,EventLogType.blackA_bet);
+				
 					player_reward.put(player.getUuid(), (long)0);
 					player_bet.put(player.getUuid(), bet);
 				}
@@ -102,6 +104,8 @@ public class BlackATable extends GameTable{
 			player_bet.put(player.getUuid(),(long)0);
 			PlayerDataService.getInstance().modifyCoin(player, (long)player_reward.get(player.getUuid()),EventLogType.blackA_bet);
 		}
+		PlayerDataService.getInstance().addExp(player, exp);
+		
 		PlayerMsgSender.getInstance().addMsg(cMsg);
 	}
 	public void putStar(Player player,int star){
