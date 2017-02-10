@@ -2,9 +2,7 @@ package com.gz.gamecity.gameserver.table;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -16,10 +14,8 @@ import java.util.Comparator;
 
 import org.apache.log4j.Logger;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import com.gz.util.JsonUtil;
 import com.gz.gamecity.bean.EventLogType;
 import com.gz.gamecity.bean.Player;
 import com.gz.gamecity.delay.DelayMsg;
@@ -27,16 +23,14 @@ import com.gz.gamecity.delay.InnerDelayManager;
 import com.gz.gamecity.gameserver.GSMsgReceiver;
 import com.gz.gamecity.gameserver.PlayerMsgSender;
 import com.gz.gamecity.gameserver.room.Room;
+import com.gz.gamecity.gameserver.service.common.ChatService;
 import com.gz.gamecity.gameserver.service.common.PlayerDataService;
-import com.gz.gamecity.gameserver.service.niuniu.Const;
-import com.gz.gamecity.gameserver.service.niuniu.Const.GameType;
 import com.gz.gamecity.gameserver.service.texas.TexasUtil;
 import com.gz.gamecity.gameserver.service.niuniu.PokerCommon;
 import com.gz.gamecity.protocol.Protocols;
 import com.gz.gamecity.protocol.Protocols.G2c_texas_remove_seat;
 import com.gz.websocket.msg.ClientMsg;
 
-import io.netty.handler.ssl.ApplicationProtocolConfig.Protocol;
 
 
 public class TexasTable extends GameTable {
@@ -253,8 +247,8 @@ public class TexasTable extends GameTable {
 	private static final int N_PUBLIC_CARD_MAX = 5;
 	private static final int N_HAND_CARD_MAX = 2;
 	
-	private static final long N_START_DELAY	= 20 * 1000l;
-	private static final long N_PLAYER_ACTION_DELAY = 60 * 1000l;
+	private static final long N_START_DELAY	= 5 * 1000l;
+	private static final long N_PLAYER_ACTION_DELAY = 20 * 1000l;
 
 	private int m_nLv;				// 等级场
 	private long m_nBlindsMin;		//最小盲注
@@ -504,12 +498,19 @@ public class TexasTable extends GameTable {
 			return ;
 		}
 		
+		ActionType eTmpAction = seatInfo.eAction;
+
+		
 		//seatInfo.clear();
 
 		//ClientMsg clientMsg = pkgSeatInfoMsg(seatInfo);
 		//sendAllPlayer(clientMsg);
 		
 		removeSeatInfo(seatInfo);
+		
+		if (table_status == STATUS_ONGOING && eTmpAction == ActionType.DOING) {
+			nextPlayerDoing();
+		}
 		
 		log.debug("texas remove player [uuid=" + strUuid + "]");
 	}
@@ -852,7 +853,6 @@ public class TexasTable extends GameTable {
 		clientMsg.setChannel(player.getChannel());
 		PlayerMsgSender.getInstance().addMsg(clientMsg);
 		
-		
 		nextPlayerDoing();
 	}
 	
@@ -1140,7 +1140,7 @@ public class TexasTable extends GameTable {
 				updatePlayerStatus(seatInfo, PlayerStatus.READY);
 			}*/
 			seatInfo.initToStart();
-			
+			sendAllPlayer(pkgSeatInfoMsg(seatInfo));
 		}
 
 		// init card deck
@@ -1211,8 +1211,8 @@ public class TexasTable extends GameTable {
 		log.debug("start round[playerCnt=" + getPlayerCount()+ " match_cnt=" + m_nMatchCnt + " button_index=" + m_nButtonIndex + "]");
 		// 大小盲注 压注
 		m_nRaiseBeginIndex = smallBlindSeat.nSeatIndex;
-		playerBet(smallBlindSeat, m_nBetMin / 2, ActionType.BLIND_BET);
-		playerBet(bigBlindSeat, m_nBetMin, ActionType.BLIND_BET);
+		playerBet(smallBlindSeat, m_nBlindsMin, ActionType.BLIND_BET);
+		playerBet(bigBlindSeat, m_nBlindsMax, ActionType.BLIND_BET);
 		
 		nextPlayerDoing();
 	}
@@ -1239,7 +1239,6 @@ public class TexasTable extends GameTable {
 			log.debug("pot info[i=" + i + " bet_limit=" + m_arrayPot.get(i).nBetLimit + " pot_value=" + m_arrayPot.get(i).nPotValue + 
 					" player_cnt=" + m_arrayPot.get(i).arraySeat.size() + "]");
 		}
-		
 		
 		TreeMap<String, Winner> mapWinner = new TreeMap<String, Winner>(); // map<uuid, ...>
 		
@@ -1273,6 +1272,34 @@ public class TexasTable extends GameTable {
 			winner.nCoinWin = winner.nCoinWin - nCoinRake;
 			// reward coin
 			PlayerDataService.getInstance().modifyCoin(winner.seatInfo.player, winner.nCoinWin, EventLogType.texas_reward);
+			
+			// notice boardcast
+			if (TexasUtil.getCardResultByScore(winner.nScore) == TexasUtil.CardResult.ROYAL_FLUSH.value() ) {
+				// royal flush
+				StringBuffer buffer = new StringBuffer();
+				// 恭喜玩家XXX在德州扑克（初/中/高级场）中开出皇家同花顺，获得奖金XXX元，速来围观
+				String strTmp = null;
+				if (m_nLv == 1) {
+					strTmp = new String("初");
+				} else if (m_nLv == 2) {
+					strTmp = new String("中");
+				} else if (m_nLv == 3) {
+					strTmp = new String("高");
+				} else {
+					strTmp = String.valueOf(m_nLv);
+				}
+				
+				buffer.append("恭喜玩家");
+				buffer.append(winner.seatInfo.player.getName());
+				buffer.append("在德州扑克");
+				buffer.append(strTmp);
+				buffer.append("级场中开出皇家同花顺，获得奖金");
+				buffer.append(winner.nCoinWin);
+				buffer.append("金币，速来围观");
+				
+				ChatService.getInstance().sendGameMsg(buffer.toString());
+			}
+			
 		}
 		
 		// show hand card
@@ -1326,7 +1353,6 @@ public class TexasTable extends GameTable {
 		
 		sendAllPlayer(clientMsg);
 		
-		
 		// init table
 		for (int i = 0; i < m_szPublicCard.length; ++i) {
 			m_szPublicCard[i] = -1;
@@ -1345,12 +1371,14 @@ public class TexasTable extends GameTable {
 		
 		sendAllPlayer(msgInit);
 
-		
 		for (int i = 0; i < m_listSeatInfo.size(); ++i) {
 			SeatInfo seatInfo = m_listSeatInfo.get(i);
 			if (seatInfo.player == null)
 				continue;
+			// add exp
+			PlayerDataService.getInstance().addExp(seatInfo.player, 10);
 			
+			// kick player or init player
 			if (seatInfo.player.getCoin() < m_nBetMin) {
 				ClientMsg tmpMsg = pkgKickOutTableMsg(seatInfo.player.getUuid(), "金币不够，不能进入房间");
 				tmpMsg.setChannel(seatInfo.player.getChannel());
@@ -1551,13 +1579,14 @@ public class TexasTable extends GameTable {
 		ArrayList<JSONObject> arrayJsonObj = new ArrayList<JSONObject>();
 		for (int i = 0; i < m_listSeatInfo.size(); ++i) {
 			SeatInfo seatInfo = m_listSeatInfo.get(i);
-			if (seatInfo.player != null && (seatInfo.canReward() || seatInfo.bShowCard)) {
+			if (seatInfo.player != null && (seatInfo.canReward()|| seatInfo.bShowCard)) {
 				JSONObject tmpObj = new JSONObject();
 				tmpObj.put(Protocols.G2c_texas_hand_card.Hand_card.UUID, seatInfo.player.getUuid());
 				tmpObj.put(Protocols.G2c_texas_hand_card.Hand_card.CARD1, seatInfo.nCard1);
 				tmpObj.put(Protocols.G2c_texas_hand_card.Hand_card.CARD2, seatInfo.nCard2);
 				tmpObj.put(Protocols.G2c_texas_hand_card.Hand_card.RESULT, TexasUtil.getCardResultByScore(seatInfo.nScore));
 				arrayJsonObj.add(tmpObj);
+				
 			}
 		}
 		
@@ -1924,6 +1953,13 @@ public class TexasTable extends GameTable {
 		
 		retMsg.setChannel(player.getChannel());
 		PlayerMsgSender.getInstance().addMsg(retMsg);
+	}
+
+
+	@Override
+	public void closeTable() {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

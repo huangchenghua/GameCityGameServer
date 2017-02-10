@@ -93,7 +93,7 @@ public class LabaService implements LogicHandler {
 	 */
 	private void handleBet(Player player, ClientMsg cMsg) {
 		// TODO Auto-generated method stub
-		long bet = cMsg.getJson().getIntValue("bet");
+		long bet = cMsg.getJson().getIntValue(Protocols.C2g_laba_bet.BET);
 		
 		if(bet>player.getCoin()||bet<0){
 			cMsg.closeChannel();
@@ -118,7 +118,7 @@ public class LabaService implements LogicHandler {
 		cMsg.put(Protocols.SUBCODE, Protocols.G2c_laba_enter.subCode_value);
 		Room room=RoomManager.getInstance().enterRoom(player, RoomType.Laba);
 		if(room==null){
-			cMsg.put(Protocols.ERRORCODE, "进入房间失败");
+			cMsg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str14"));
 			PlayerMsgSender.getInstance().addMsg(cMsg);
 			return;
 		}
@@ -128,7 +128,7 @@ public class LabaService implements LogicHandler {
 			room.addTable(table);
 			table.player_star.put(player.getUuid(), 0);
 		}else{
-			cMsg.put(Protocols.ERRORCODE,"条件不满足");
+			cMsg.put(Protocols.ERRORCODE,AllTemplate.getGameString("str18"));
 		}
 		
 		

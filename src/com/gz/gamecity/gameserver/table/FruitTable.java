@@ -15,6 +15,7 @@ import com.gz.gamecity.gameserver.GSMsgReceiver;
 import com.gz.gamecity.gameserver.PlayerMsgSender;
 import com.gz.gamecity.gameserver.config.AllTemplate;
 import com.gz.gamecity.gameserver.room.Room;
+import com.gz.gamecity.gameserver.service.common.ChatService;
 import com.gz.gamecity.gameserver.service.common.PlayerDataService;
 import com.gz.gamecity.protocol.Protocols;
 import com.gz.util.JsonUtil;
@@ -35,6 +36,7 @@ public class FruitTable extends GameTable{
 	private long next_event_time;
 	
 	private ConcurrentHashMap<String, HashMap<Integer, BetInfo>> bets_player=new ConcurrentHashMap<>();
+	private ConcurrentHashMap<String, HashMap<Integer, BetInfo>> bets_player_last=new ConcurrentHashMap<>();
 	private ConcurrentHashMap<Integer, Long> bets_table=new ConcurrentHashMap<>();
 	
 	private JSONObject json_table_bets=new JSONObject();
@@ -139,6 +141,8 @@ public class FruitTable extends GameTable{
 	public void gameStart() {
 		super.gameStart();
 		bets_table.clear();
+		bets_player_last.clear();
+		bets_player_last.putAll(bets_player);
 		bets_player.clear();
 		json_table_bets.put(Protocols.MAINCODE, Protocols.G2c_fruit_bet_refresh.mainCode_value);
 		json_table_bets.put(Protocols.SUBCODE, Protocols.G2c_fruit_bet_refresh.subCode_value);
@@ -219,6 +223,7 @@ public class FruitTable extends GameTable{
 		JSONArray json_odds_arr = AllTemplate.getFruit_odds();
 		int index = list_result.get(list_result.size()-1);
 		JSONObject json_result_odds = json_odds_arr.getJSONObject(index);
+		long reward_all = 0l;
 		for(String uuid:bets_player.keySet()){
 			Player player = players.get(uuid);
 			if(player==null)
@@ -227,6 +232,19 @@ public class FruitTable extends GameTable{
 			long reward = getPlayerReward(json_result_odds,map_bets);
 			if(reward>0)
 				PlayerDataService.getInstance().modifyCoin(player, reward,EventLogType.fruit_checkout);
+			reward_all+=reward;
+		}
+		if(index  == 20){ //出了大满贯要全服通知
+			StringBuffer sb = new StringBuffer();
+			if(reward_all == 0){
+				sb.append(AllTemplate.getGameString("str22"));
+			}else{
+				sb.append(AllTemplate.getGameString("str23"));
+				sb.append(reward_all);
+				sb.append(AllTemplate.getGameString("str24"));
+			}
+			
+			ChatService.getInstance().sendGameMsg(sb.toString());
 		}
 		
 	}
@@ -332,6 +350,8 @@ public class FruitTable extends GameTable{
 		
 		
 		sendTableMsg(msg_table_result);
+		
+		
 	}
 	
 	private static int getRandomIndex(int[] options_Exclude){
@@ -428,7 +448,50 @@ public class FruitTable extends GameTable{
 		return reward;
 	}
 	
-	
+	public void rebet(Player player,ClientMsg msg)
+	{
+		msg.put(Protocols.SUBCODE, Protocols.G2c_fruit_bet.subCode_value);
+		//如果已经下过注了就不能使用重复下注
+		HashMap<Integer, BetInfo> bet_player = bets_player.get(player.getUuid());
+		if(bet_player!=null)
+		{
+			msg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str25"));
+			PlayerMsgSender.getInstance().addMsg(msg);
+			return;
+		}
+		//如果前一把没有下注就返回
+		bet_player = bets_player_last.get(player.getUuid());
+		if(bet_player==null)
+		{
+			msg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str26"));
+			PlayerMsgSender.getInstance().addMsg(msg);
+			return;
+		}
+		//计算当前游戏币是否足够重复下注
+		long bet = 0l;
+		for (BetInfo betInfo:bet_player.values()) {
+			bet = bet + betInfo.bet;
+		}
+		if(bet>player.getCoin()){
+			msg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str27"));
+			PlayerMsgSender.getInstance().addMsg(msg);
+			return;
+		}
+		bets_player.put(player.getUuid(), bet_player);
+		PlayerDataService.getInstance().modifyCoin(player, -bet, EventLogType.fruit_bet);
+		sendMyBetInfo(player);
+		for (BetInfo betInfo:bet_player.values()) {
+			try {
+				long bets = bets_table.get(betInfo.id);
+				bets += betInfo.bet;
+				bets_table.put(betInfo.id, bets);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		sendTableBetInfo();
+	}
 	
 
 	public void putBet(Player player,ClientMsg msg){
@@ -476,6 +539,13 @@ public class FruitTable extends GameTable{
 			long _bet=betInfo.bet+bet;
 			betInfo.bet = _bet;
 		}
+		sendMyBetInfo(player);
+		sendTableBetInfo();
+		
+	}
+	
+	private void sendMyBetInfo(Player player){
+		HashMap<Integer, BetInfo> bets_mine = bets_player.get(player.getUuid());
 		JSONObject[] jsons_mine=new JSONObject[bets_mine.size()];
 		int i = 0;
 		for(Integer _id:bets_mine.keySet()){
@@ -490,9 +560,11 @@ public class FruitTable extends GameTable{
 		msg_mine.put(Protocols.G2c_fruit_bet.BETINFO, jsons_mine);
 		msg_mine.setChannel(player.getChannel());
 		PlayerMsgSender.getInstance().addMsg(msg_mine);
-		
+	}
+	
+	private void sendTableBetInfo(){
 		JSONObject[] jsons=new JSONObject[bets_table.size()];
-		i=0;
+		int i=0;
 		for(Integer _id:bets_table.keySet()){
 			jsons[i]=new JSONObject();
 			jsons[i].put(Protocols.G2c_fruit_bet_refresh.BetInfo.ID, _id);
@@ -508,6 +580,12 @@ public class FruitTable extends GameTable{
 	@Override
 	public void playerReconnect(Player player) {
 		sendTableInfo(player);
+		
+	}
+
+	@Override
+	public void closeTable() {
+		// TODO Auto-generated method stub
 		
 	}
 }

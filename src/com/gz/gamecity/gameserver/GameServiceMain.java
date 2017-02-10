@@ -9,6 +9,7 @@ import com.gz.gamecity.delay.InnerDelayManager;
 import com.gz.gamecity.gameserver.config.AllTemplate;
 import com.gz.gamecity.gameserver.config.ConfigField;
 import com.gz.gamecity.gameserver.handler.impl.PlayerMsgHandler;
+import com.gz.gamecity.gameserver.service.common.AlmsHandler;
 import com.gz.gamecity.gameserver.service.common.ChatService;
 import com.gz.gamecity.gameserver.service.common.FriendHandler;
 import com.gz.gamecity.gameserver.service.common.HallService;
@@ -127,12 +128,14 @@ public class GameServiceMain {
 		GSMsgReceiver.getInstance().registHandler(new PlayerDataLoginService());
 		// PlayerLoginService.getInstance());
 
-		GSMsgReceiver.getInstance().registHandler(new ChatService());
+		GSMsgReceiver.getInstance().registHandler(ChatService.getInstance());
 		GSMsgReceiver.getInstance().registHandler(new TexasHandler());
 		GSMsgReceiver.getInstance().registHandler(new FriendHandler());
 		
 		GSMsgReceiver.getInstance().registHandler(MailService.getInstance());
 
+		GSMsgReceiver.getInstance().registHandler(new AlmsHandler());
+		
 		GSMsgReceiver.getInstance().start();
 	}
 
@@ -153,7 +156,7 @@ public class GameServiceMain {
 	}
 
 	public void stopServer() {
-		// TODO
+		
 	}
 	
 }

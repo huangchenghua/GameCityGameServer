@@ -128,5 +128,6 @@ public abstract class GameTable {
 		return false;
 	}
 	
+	public abstract void closeTable();
 }
 

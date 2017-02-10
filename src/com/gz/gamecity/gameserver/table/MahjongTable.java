@@ -151,13 +151,22 @@ public class MahjongTable extends GameTable{
 		}
 		
 		array = randomCard(win,player);
-		cMsg.put("result", array);
+		cMsg.put(Protocols.G2c_mahjong_getview.RESULT, array);
 		cMsg.put(Protocols.SUBCODE,Protocols.G2c_mahjong_getview.subCode_value);
 		PlayerMsgSender.getInstance().addMsg(cMsg);
 	}
 	
 	//麻将牌处理
 	public void handleRandom(Player player,ClientMsg cMsg){
+		
+		int rate = player_probability.get(player.getUuid());
+		
+		if(rate != 1){
+			long tempCashChange = player_bet2.get(player.getUuid())*(rate-1);
+			PlayerDataService.getInstance().modifyCoin(player,-tempCashChange,EventLogType.mahjong_bet);
+		}
+		player_bet2.put(player.getUuid(), player_bet2.get(player.getUuid())*rate);
+		
 		// TODO Auto-generated method stub
 		JSONArray mahjongProbability1 = AllTemplate.getMahjong_probability1_jsonArray();
 		JSONArray mahjongProbability2 = AllTemplate.getMahjong_probability2_jsonArray();
@@ -187,12 +196,12 @@ public class MahjongTable extends GameTable{
 			
 			long award = player_bet2.get(player.getUuid());
 			
-			award = (long)(system_probability.get(player.getUuid())*award*player_probability.get(player.getUuid()));
+			award = (long)(system_probability.get(player.getUuid())*award);
 			
 			player_bet2.put(player.getUuid(), award);
 			
-			cMsg.put("result", array);
-			cMsg.put("win", true);
+			cMsg.put(Protocols.G2c_mahjong_bet.RESULT, array);
+			cMsg.put(Protocols.G2c_mahjong_bet.WIN, true);
 		}else{
 			//输
 			array = randomCard(false,player);
@@ -201,11 +210,11 @@ public class MahjongTable extends GameTable{
 			
 			PlayerDataService.getInstance().modifyCoin(player,-award,EventLogType.mahjong_bet);
 			
-			cMsg.put("win", false);
+			cMsg.put(Protocols.G2c_mahjong_bet.WIN, false);
 			if(lock.get(player.getUuid())==true){
-				cMsg.put("result", array);
+				cMsg.put(Protocols.G2c_mahjong_bet.RESULT, array);
 			}else if(lock.get(player.getUuid())==false){
-				cMsg.put("result", array);
+				cMsg.put(Protocols.G2c_mahjong_bet.RESULT, array);
 				system_probability.put(player.getUuid(),system_probability.get(player.getUuid()) - 0.25);
 				ArrayList tempArray = new ArrayList();
 				tempArray = card_list.get(player.getUuid());
@@ -252,5 +261,11 @@ public class MahjongTable extends GameTable{
 			j++;
 		}
 		return returnArray;
+	}
+
+	@Override
+	public void closeTable() {
+		// TODO Auto-generated method stub
+		
 	}
 }

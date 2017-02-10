@@ -117,6 +117,7 @@ public class PlayerLoginService implements LogicHandler {
 		{
 			// TODO 验证不通过
 			System.out.println("参数异常");
+			return;
 		}
 		
 		Player player=new Player();

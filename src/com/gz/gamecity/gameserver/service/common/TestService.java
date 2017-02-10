@@ -76,18 +76,7 @@ public class TestService implements LogicHandler {
 	private void handleTestCharge(Player player,ClientMsg msg) {
 		// TODO 给玩家加钱，同时对 vip改变做处理
 		int change = msg.getJson().getIntValue("coin");
-		PlayerDataService.getInstance().modifyCoin(player,change,EventLogType.test);
-		long charge_total=player.getCharge_total()+change/1000;
-		player.setCharge_total(charge_total);
-		int vip=getvipLevel(charge_total);
-			player.setVip(vip);
-		JSONObject data=new JSONObject();
-		data.put("name", player.getName());
-		data.put("head", player.getHead());
-		data.put("vip", player.getVip());
-		data.put("charge_total", player.getCharge_total());
-		PlayerDataService.getInstance().modifyData(player, data);
-	
+		PlayerDataService.getInstance().playerCharge(player, change);
 	}
 	
 	public int getvipLevel(long charge){

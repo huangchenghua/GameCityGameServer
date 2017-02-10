@@ -76,7 +76,7 @@ public class LuckyWheelService implements LogicHandler{
 		cMsg.put(Protocols.SUBCODE, Protocols.G2c_luckyWheel_enter.subCode_value);
 		Room room=RoomManager.getInstance().enterRoom(player, RoomType.LuckyWheel);
 		if(room==null){
-			cMsg.put(Protocols.ERRORCODE, "进入房间失败");
+			cMsg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str14"));
 			PlayerMsgSender.getInstance().addMsg(cMsg);
 			return;
 		}
@@ -85,7 +85,7 @@ public class LuckyWheelService implements LogicHandler{
 		if(result){
 			room.addTable(table);
 		}else{
-			cMsg.put(Protocols.ERRORCODE,"条件不满足");
+			cMsg.put(Protocols.ERRORCODE,AllTemplate.getGameString("str18"));
 		}
 		
 		PlayerMsgSender.getInstance().addMsg(cMsg);

@@ -67,12 +67,50 @@ public class PlayerDataLoginService implements LogicHandler {
 		case Protocols.L2g_unsilent.subCode_value:
 			handleUnsilent(msg);
 			break;
+		case Protocols.L2g_sendMail.subCode_value:
+			handleSengMail(msg);
+			break;
+		case Protocols.L2g_sendGameNotice.subCode_value:
+			handleSendGameNotice(msg);
+			break;
+
+		case Protocols.L2g_charts_get_list.subCode_value:
+			handleChartsGetList(msg);
+			break;
+
+		case Protocols.L2g_player_charge.subCode_value:
+			handlePlayerCharge(msg);
+			break;
+
 		default:
 
 			break;
 		}
 	}
 	
+	private void handlePlayerCharge(ProtocolMsg msg) {
+		String uuid=msg.getJson().getString(Protocols.L2g_player_charge.UUID);
+		long coin = msg.getJson().getLongValue(Protocols.L2g_player_charge.COIN);
+		if(uuid==null)
+			return;
+		Player player = PlayerManager.getInstance().getOnlinePlayer(uuid);
+		if(player == null)
+			return;
+		PlayerDataService.getInstance().playerCharge(player, coin);
+	}
+
+	private void handleSendGameNotice(ProtocolMsg msg) {
+		ChatService.getInstance().sendGameMsg(msg.getJson().getString(Protocols.L2g_sendGameNotice.CONTENT));
+	}
+
+	private void handleSengMail(ProtocolMsg msg) {
+		String player_uuid = msg.getJson().getString(Protocols.L2g_sendMail.UUID);
+		String title = msg.getJson().getString(Protocols.L2g_sendMail.TITLE);
+		String content = msg.getJson().getString(Protocols.L2g_sendMail.CONTENT);
+		String attachments = msg.getJson().getString(Protocols.L2g_sendMail.ATTACHMENTS);
+		MailService.getInstance().sendMail(player_uuid, title, content, attachments);
+	}
+
 	private void handleUnsilent(ProtocolMsg msg) {
 		String uuid = msg.getJson().getString(Protocols.L2g_unsilent.UUID);
 		Player player = PlayerManager.getInstance().getOnlinePlayer(uuid);
@@ -88,23 +126,23 @@ public class PlayerDataLoginService implements LogicHandler {
 			int nCoin1 = jo1.getIntValue(Protocols.G2c_friend_list.Player_list.COIN);
 			int nCoin2 = jo2.getIntValue(Protocols.G2c_friend_list.Player_list.COIN);
 			if (nCoin1 > nCoin2) {
-				return 1;
-			} else if (nCoin1 < nCoin2) {
 				return -1;
+			} else if (nCoin1 < nCoin2) {
+				return 1;
 			} else {
 				int nVip1 = jo1.getIntValue(Protocols.G2c_friend_list.Player_list.VIP);
 				int nVip2 = jo2.getIntValue(Protocols.G2c_friend_list.Player_list.VIP);
 				if (nVip1 > nVip2) {
-					return 1;
-				} else if (nVip1 < nVip2) {
 					return -1;
+				} else if (nVip1 < nVip2) {
+					return 1;
 				} else {
 					int nLv1 = jo1.getIntValue(Protocols.G2c_friend_list.Player_list.LV);
 					int nLv2 = jo2.getIntValue(Protocols.G2c_friend_list.Player_list.LV);
 					if (nLv1 >= nLv1) {
-						return 1;
-					} else {
 						return -1;
+					} else {
+						return 1;
 					}
 				}
 			}
@@ -314,6 +352,23 @@ public class PlayerDataLoginService implements LogicHandler {
 		cMsg.put(Protocols.SUBCODE, Protocols.G2c_mail_list.subCode_value);
 		cMsg.setChannel(player.getChannel());
 		PlayerMsgSender.getInstance().addMsg(cMsg);
+	}
+	
+	private void handleChartsGetList(ProtocolMsg msg) {
+		String strUuidSelf = msg.getJson().getString(Protocols.L2g_charts_get_list.UUID_SELF);
+		Player player = PlayerManager.getInstance().getOnlinePlayer(strUuidSelf);
+		if (player == null || !player.isOnline()) {
+			return ;
+		}
+		
+		ClientMsg clientMsg = new ClientMsg();
+		clientMsg.setJson(msg.getJson());
+		clientMsg.getJson().remove(Protocols.L2g_charts_get_list.SERVER_ID);
+		clientMsg.getJson().remove(Protocols.L2g_charts_get_list.UUID_SELF);
+		
+		clientMsg.setChannel(player.getChannel());
+		PlayerMsgSender.getInstance().addMsg(clientMsg);
+		
 	}
 
 	@Override

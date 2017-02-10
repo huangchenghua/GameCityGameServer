@@ -41,9 +41,18 @@ public class HallService implements LogicHandler {
 		case Protocols.C2g_buy_head.subCode_value:
 			handleBuyHead(player,msg);
 			break;
+		case Protocols.C2g_gonggao.subCode_value:
+			handleGonggao(msg);
+			break;
 		default:
 			break;
 		}
+	}
+
+	private void handleGonggao(ClientMsg msg) {
+		msg.put(Protocols.SUBCODE, Protocols.G2c_gonggao.subCode_value);
+		msg.put(Protocols.G2c_gonggao.CONTENT, AllTemplate.getJson_game_notice().getString("content"));
+		PlayerMsgSender.getInstance().addMsg(msg);
 	}
 
 	private void handleBuyHead(Player player, ClientMsg msg) {
@@ -54,7 +63,7 @@ public class HallService implements LogicHandler {
 			return;
 		for(int i=0;i<player.getHeads().length;i++){
 			if(player.getHeads()[i]==id){
-				msg.put(Protocols.ERRORCODE, "已经拥有该头像了");
+				msg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str9"));
 				PlayerMsgSender.getInstance().addMsg(msg);
 				return;
 			}
@@ -69,7 +78,7 @@ public class HallService implements LogicHandler {
 		}
 		
 		if(head_info.getInteger("prize")>player.getCoin()){
-			msg.put(Protocols.ERRORCODE, "游戏币不足");
+			msg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str5"));
 			PlayerMsgSender.getInstance().addMsg(msg);
 			return;
 		}
@@ -90,7 +99,7 @@ public class HallService implements LogicHandler {
 	private void handleSignin(Player player, ClientMsg msg) {
 		msg.put(Protocols.SUBCODE, Protocols.G2c_signin.subCode_value);
 		if(player.isSigned()){
-			msg.put(Protocols.ERRORCODE, "今天已经签到过了");
+			msg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str10"));
 			PlayerMsgSender.getInstance().addMsg(msg);
 			return;
 		}

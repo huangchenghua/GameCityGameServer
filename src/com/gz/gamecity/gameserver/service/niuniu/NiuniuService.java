@@ -80,7 +80,7 @@ public class NiuniuService implements LogicHandler {
 			if(table.canLeave(player.getUuid())){
 				table.playerLeave(player.getUuid());
 			}else{
-				cMsg.put(Protocols.ERRORCODE,"无法离开");
+				cMsg.put(Protocols.ERRORCODE,AllTemplate.getGameString("str12"));
 				result = false;
 			}
 		}
@@ -101,10 +101,10 @@ public class NiuniuService implements LogicHandler {
 			if(table.canLeave(player.getUuid())){
 				table.playerLeave(player.getUuid());
 			}else{
-				cMsg.put(Protocols.ERRORCODE,"无法离开");
+				cMsg.put(Protocols.ERRORCODE,AllTemplate.getGameString("str12"));
 			}
 		}else{
-			cMsg.put(Protocols.ERRORCODE,"未知的错误");
+			cMsg.put(Protocols.ERRORCODE,AllTemplate.getGameString("str13"));
 		}
 		PlayerMsgSender.getInstance().addMsg(cMsg);
 	}
@@ -178,17 +178,17 @@ public class NiuniuService implements LogicHandler {
 			}
 		}
 		if(lvl==0){
-			cMsg.put(Protocols.ERRORCODE, "钱太少不够资格");
+			cMsg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str16"));
 			PlayerMsgSender.getInstance().addMsg(cMsg);
 			return;
 		}
 		if(lvl<cMsg.getJson().getIntValue(Protocols.C2g_niuniu_choose_lvl.LVL)){
-			cMsg.put(Protocols.ERRORCODE, "钱太少不够资格");
+			cMsg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str16"));
 			PlayerMsgSender.getInstance().addMsg(cMsg);
 			return;
 		}
 		if(lvl>cMsg.getJson().getIntValue(Protocols.C2g_niuniu_choose_lvl.LVL)){
-			cMsg.put(Protocols.ERRORCODE, "钱太多不够资格");
+			cMsg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str17"));
 			PlayerMsgSender.getInstance().addMsg(cMsg);
 			return;
 		}
@@ -200,7 +200,7 @@ public class NiuniuService implements LogicHandler {
 		if(result){
 			room.addTable(table);
 		}else{
-			cMsg.put(Protocols.ERRORCODE,"条件不满足");
+			cMsg.put(Protocols.ERRORCODE,AllTemplate.getGameString("str18"));
 			PlayerMsgSender.getInstance().addMsg(cMsg);
 			return;
 		}
@@ -210,7 +210,7 @@ public class NiuniuService implements LogicHandler {
 		cMsg.put(Protocols.SUBCODE, Protocols.G2c_niuniu_enter.subCode_value);
 		Room room=RoomManager.getInstance().enterRoom(player, RoomType.Niuniu);
 		if(room==null){
-			cMsg.put(Protocols.ERRORCODE, "进入房间失败");
+			cMsg.put(Protocols.ERRORCODE,AllTemplate.getGameString("str14"));
 			PlayerMsgSender.getInstance().addMsg(cMsg);
 			return;
 		}

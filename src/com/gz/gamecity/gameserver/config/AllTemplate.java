@@ -3,6 +3,7 @@ package com.gz.gamecity.gameserver.config;
 import java.util.Random;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.gz.util.JsonFileRead;
 
 public class AllTemplate {
@@ -18,6 +19,8 @@ public class AllTemplate {
 	//----------------------系统配置表-------------------------------
 	private static JSONArray system_login_announce_jsonArray = new JSONArray();//登录公告
 	private static JSONArray hall_vipLever_infoArray = new JSONArray();//vip等级信息
+	private static JSONArray simple_chat_levelArray = new JSONArray();//普通聊天等级限制信息
+	private static JSONArray horn_chat_levelArray = new JSONArray();//喇叭聊天等级限制信息
 	
 	//----------------------游戏配置表-------------------------------
 	private static JSONArray fruit_ordinary_jsonArray = new JSONArray();//水果机
@@ -49,6 +52,10 @@ public class AllTemplate {
 	
 	
 	private static JSONArray texas_level_jsonArray = new JSONArray();
+	
+	private static JSONObject json_game_notice = new JSONObject();
+	private static JSONObject json_str = new JSONObject();
+
 
 
 
@@ -69,6 +76,8 @@ public class AllTemplate {
 
 		system_login_announce_jsonArray = JsonFileRead.getInstance().readJsonArray(PATH+"system_login_announce.json");
 		hall_vipLever_infoArray = JsonFileRead.getInstance().readJsonArray(PATH+"hall_vipLever_Info.json");
+		simple_chat_levelArray = JsonFileRead.getInstance().readJsonArray(PATH+"chat_level.json");
+		horn_chat_levelArray = JsonFileRead.getInstance().readJsonArray(PATH+"horn_level.json");
 		niuniu_level_jsonArray = JsonFileRead.getInstance().readJsonArray(PATH+"niuniu_level.json");
 		niuniu_probobality1 = JsonFileRead.getInstance().readJsonArray(PATH+"niuniu_probobality1.json");
 		niuniu_probobality2 = JsonFileRead.getInstance().readJsonArray(PATH+"niuniu_probobality2.json");
@@ -84,7 +93,8 @@ public class AllTemplate {
 		exp_config = JsonFileRead.getInstance().readJsonArray(PATH + "exp.json");
 		heads_config = JsonFileRead.getInstance().readJsonArray(PATH + "heads.json");
 		
-
+		json_game_notice = JsonFileRead.getInstance().readJson(PATH + "gonggao.json");
+		json_str = JsonFileRead.getInstance().readJson(PATH + "gameString.json");
 //		System.out.println("   is : "  + fruit_special_jsonArray);
 //		System.out.println("   is : " + system_login_announce_jsonArray);
 //		System.out.println("   is : " + luckyWheel_level_jsonArray);
@@ -98,6 +108,11 @@ public class AllTemplate {
 	}
 	
 	
+	public static JSONObject getJson_str() {
+		return json_str;
+	}
+
+
 	public static JSONArray getHeads_config() {
 		return heads_config;
 	}
@@ -213,6 +228,14 @@ public class AllTemplate {
 		return vipLevel_jsonArray;
 	}
 	
+	public static JSONArray getsimple_chat_levelArray(){
+		return simple_chat_levelArray;
+	}
+	
+	public static JSONArray gethorn_chat_levelArray(){
+		return horn_chat_levelArray;
+	}
+	
 	public static JSONArray getFruit_level() {
 		return fruit_level;
 	}
@@ -223,7 +246,14 @@ public class AllTemplate {
 	}
 
 
+
+	public static JSONObject getJson_game_notice() {
+		return json_game_notice;
+	}
 	
+	public static String getGameString(String key){
+		return json_str.getString(key);
+	}
 	
 
 //	public static void main(String[] args) {

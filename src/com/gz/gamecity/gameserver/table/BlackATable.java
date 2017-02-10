@@ -117,6 +117,12 @@ public class BlackATable extends GameTable{
 		playerLeave(player.getUuid());
 		room.playerLeave(player);
 	}
+
+	@Override
+	public void closeTable() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 

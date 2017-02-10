@@ -21,7 +21,9 @@ import com.gz.gamecity.gameserver.PlayerMsgSender;
 import com.gz.gamecity.gameserver.config.AllTemplate;
 import com.gz.gamecity.gameserver.config.ConfigField;
 import com.gz.gamecity.gameserver.room.Room;
+import com.gz.gamecity.gameserver.service.common.ChatService;
 import com.gz.gamecity.gameserver.service.common.PlayerDataService;
+import com.gz.gamecity.gameserver.service.niuniu.Const.GameCardType;
 import com.gz.gamecity.gameserver.service.niuniu.NiuniuPoker;
 import com.gz.gamecity.gameserver.service.niuniu.PokerCommon;
 import com.gz.gamecity.gameserver.service.niuniu.Utils;
@@ -273,13 +275,13 @@ public class NiuniuTable extends GameTable {
 			
 		}else{
 			if(bet_exist.id!=id){
-				msg.put(Protocols.ERRORCODE, "只能下注同一副牌");
+				msg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str29"));
 				PlayerMsgSender.getInstance().addMsg(msg);
 				return;
 			}
 			long total=bet_exist.bet+bet;
 			if(total>(player.getCoin()-bet)/4){
-				msg.put(Protocols.ERRORCODE, "下注筹码不能超过1/5身上的钱币");
+				msg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str30"));
 				PlayerMsgSender.getInstance().addMsg(msg);
 				return;
 			}
@@ -385,7 +387,7 @@ public class NiuniuTable extends GameTable {
 				ClientMsg msg_kick=new ClientMsg();
 				msg_kick.put(Protocols.MAINCODE, Protocols.G2c_niuniu_kick_table.mainCode_value);
 				msg_kick.put(Protocols.SUBCODE, Protocols.G2c_niuniu_kick_table.subCode_value);
-				msg_kick.put(Protocols.G2c_niuniu_kick_table.INFO, "钱不够了，滚蛋吧");
+				msg_kick.put(Protocols.G2c_niuniu_kick_table.INFO, AllTemplate.getGameString("str31"));
 				msg_kick.setChannel(player.getChannel());
 				PlayerMsgSender.getInstance().addMsg(msg_kick);
 			}
@@ -437,6 +439,7 @@ public class NiuniuTable extends GameTable {
 	
 	public void checkout(){
 		dealCards();
+		sendSystemMsg();
 		sendResult();
 		settlement();
 		addExp();
@@ -520,8 +523,57 @@ public class NiuniuTable extends GameTable {
 		}else{//   如果是系统坐庄还要换一种算法
 			return getSystemBankerPokerIndex();
 		}
-		
-		
+	}
+	
+	private void sendSystemMsg(){
+		NiuniuPoker poker_biggest = poker_table.get(0);
+		if(banker == banker_system && poker_biggest.index_table_poker == 0){ //如果是系统坐庄，只有当“天、地、玄、黄”任意一位置开出“五花牛”和“五小牛”牌型时
+			return;
+		}
+		if(poker_biggest.cardType == GameCardType.DN_NN_LESS_10 || poker_biggest.cardType == GameCardType.DN_ALL_ROYAL){
+			
+			ConcurrentHashMap<String, BetInfo> bets = bets_table.get(poker_biggest.index_table_poker);
+			StringBuffer sb = new StringBuffer("");
+			if(bets.size()==0 && poker_biggest.index_table_poker != 0){ //没人下注
+				sb.append(AllTemplate.getGameString("str32"));
+				if(lvl==1)
+					sb.append(AllTemplate.getGameString("str33"));
+				else if (lvl==2) 
+					sb.append(AllTemplate.getGameString("str34"));
+				else
+					sb.append(AllTemplate.getGameString("str35"));
+				sb.append(AllTemplate.getGameString("str36"));
+				sb.append(poker_biggest.cardType.getDesc());
+				sb.append(AllTemplate.getGameString("str37"));
+			}
+			else {
+				sb.append(AllTemplate.getGameString("str38"));
+				if (lvl == 1)
+					sb.append(AllTemplate.getGameString("str33"));
+				else if (lvl == 2)
+					sb.append(AllTemplate.getGameString("str34"));
+				else
+					sb.append(AllTemplate.getGameString("str35"));
+				sb.append(AllTemplate.getGameString("str39"));
+				sb.append(poker_biggest.cardType.getDesc());
+				sb.append(AllTemplate.getGameString("str40"));
+				long reward = 0l;
+				if (poker_biggest.index_table_poker == 0) { // 庄家赢钱
+					for (ConcurrentHashMap<String, BetInfo> bet : bets_table.values()) {
+						for (BetInfo betInfo : bet.values()) {
+							reward = reward + (betInfo.bet * poker_biggest.cardType.getOdds());
+						}
+					}
+				} else {
+					for (BetInfo betInfo : bets.values()) {
+						reward = reward + (betInfo.bet * poker_biggest.cardType.getOdds());
+					}
+				}
+				sb.append(reward).append(AllTemplate.getGameString("str41"));
+			}
+			
+			ChatService.getInstance().sendGameMsg(sb.toString());
+		}
 	}
 	
 	private int[] getSystemBankerPokerIndex(){
@@ -709,25 +761,25 @@ public class NiuniuTable extends GameTable {
 		long condition = list_json.get(0).getLongValue("banker_condition");
 		if(player.getCoin()<condition){
 			msg.put(Protocols.SUBCODE, Protocols.G2c_niuniu_req_banker.subCode_value);
-			msg.put(Protocols.ERRORCODE, "不够资格");
+			msg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str42"));
 			PlayerMsgSender.getInstance().addMsg(msg);
 			return;
 		}
 		if(list_req_banker.contains(player.getUuid())){
 			msg.put(Protocols.SUBCODE, Protocols.G2c_niuniu_req_banker.subCode_value);
-			msg.put(Protocols.ERRORCODE, "不能重复请求上庄");
+			msg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str43"));
 			PlayerMsgSender.getInstance().addMsg(msg);
 			return;
 		}
 		if(players.size()<=1){
 			msg.put(Protocols.SUBCODE, Protocols.G2c_niuniu_req_banker.subCode_value);
-			msg.put(Protocols.ERRORCODE, "没有其他的玩家，无法上庄");
+			msg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str44"));
 			PlayerMsgSender.getInstance().addMsg(msg);
 			return;
 		}
 		if(player == banker){
 			msg.put(Protocols.SUBCODE, Protocols.G2c_niuniu_req_banker.subCode_value);
-			msg.put(Protocols.ERRORCODE, "已经是庄家了");
+			msg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str45"));
 			PlayerMsgSender.getInstance().addMsg(msg);
 			return;
 		}
@@ -802,6 +854,12 @@ public class NiuniuTable extends GameTable {
 	@Override
 	public void playerReconnect(Player player) {
 		sendTableInfo(player,true);
+	}
+
+	@Override
+	public void closeTable() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

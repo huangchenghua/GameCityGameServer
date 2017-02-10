@@ -75,7 +75,7 @@ public class PlayerDataService implements LogicHandler {
 		msg.put(Protocols.SUBCODE, Protocols.G2c_data_change.subCode_value);
 		if(name!=null){
 			if(!checkName(name)){
-				msg.put(Protocols.ERRORCODE, "名字不符合要求");
+				msg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str11"));
 			}else
 			{
 				player.setName(name);
@@ -85,7 +85,7 @@ public class PlayerDataService implements LogicHandler {
 		String sign = msg.getJson().getString(Protocols.C2g_data_change.SIGN);
 		if(sign!=null){
 			if(!checkSign(sign)){
-				msg.put(Protocols.ERRORCODE, "签名不符合要求");
+				msg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str11"));
 			}else
 			{
 				player.setSign(sign);
@@ -97,6 +97,7 @@ public class PlayerDataService implements LogicHandler {
 			int head = Integer.parseInt(head_str);
 			if(!checkHead(head)){
 				msg.getChannel().close();
+				return;
 			}else{
 				player.setHead(head);
 				pMsg.put(Protocols.G2l_data_change.HEAD, head);
@@ -107,6 +108,7 @@ public class PlayerDataService implements LogicHandler {
 			byte sex = Byte.parseByte(sex_str);
 			if(!checkSex(sex)){
 				msg.getChannel().close();
+				return;
 			}else{
 				player.setSex(sex);
 				pMsg.put(Protocols.G2l_data_change.SEX, sex);
@@ -134,7 +136,7 @@ public class PlayerDataService implements LogicHandler {
 	}
 
 	private boolean checkHead(int head) {
-		if(head<0||head>15)
+		if(head<1||head>16)
 			return false;
 		return true;
 	}
@@ -198,22 +200,6 @@ public class PlayerDataService implements LogicHandler {
 		DBService.getInstance().addMsg(j);
 	}
 	
-	public void modifyData(Player player,JSONObject data){
-//		player.setVip(data.getIntValue("vip"));
-//		
-//		ClientMsg msg =new ClientMsg();
-//		msg.put(Protocols.MAINCODE, Protocols.G2c_data_change.mainCode_value);
-//		msg.put(Protocols.SUBCODE, Protocols.G2c_data_change.subCode_value);
-////		msg.put(Protocols.G2c_data_change.DATA, data);
-//		msg.setChannel(player.getChannel());
-//		PlayerMsgSender.getInstance().addMsg(msg);
-//		
-//		ProtocolMsg pmsg=new ProtocolMsg();
-//		pmsg.put(Protocols.MAINCODE, Protocols.G2l_data_change.mainCode_value);
-//		pmsg.put(Protocols.SUBCODE, Protocols.G2l_data_change.subCode_value);
-//		pmsg.put(Protocols.G2l_data_change.DATA, data);
-//		LoginMsgSender.getInstance().addMsg(pmsg);
-	}
 	
 	private JSONObject getPlayerDataJson(Player player){
 		JSONObject j = new JSONObject();
@@ -278,7 +264,21 @@ public class PlayerDataService implements LogicHandler {
 		pMsg.put(Protocols.G2l_data_change.EXP, player.getExp());
 		LoginMsgSender.getInstance().addMsg(pMsg);
 	}
+
 	
+	public void setAlms(Player player, byte nAlmsCnt, String strAlmsTime) {
+		player.setAlmsCnt(nAlmsCnt);
+		player.setAlmsTime(strAlmsTime);
+		ProtocolMsg pMsg=new ProtocolMsg();
+		
+		pMsg.put(Protocols.MAINCODE, Protocols.G2l_data_change.mainCode_value);
+		pMsg.put(Protocols.SUBCODE, Protocols.G2l_data_change.subCode_value);
+		pMsg.put(Protocols.G2l_data_change.UUID, player.getUuid());
+		pMsg.put(Protocols.G2l_data_change.ALMS_CNT, player.getAlmsCnt());
+		pMsg.put(Protocols.G2l_data_change.ALMS_TIME, player.getAlmsTime());
+		LoginMsgSender.getInstance().addMsg(pMsg);
+	}
+
 	public void addHead(Player player, int head) {
 		int[] newheads = new int[player.getHeads().length + 1];
 		System.arraycopy(player.getHeads(), 0, newheads, 0, player.getHeads().length);
@@ -291,5 +291,51 @@ public class PlayerDataService implements LogicHandler {
 		pMsg.put(Protocols.G2l_data_change.HEADS, player.getHeads());
 		LoginMsgSender.getInstance().addMsg(pMsg);
 		refreshPlayerData(player);
+	}
+
+	public void playerCharge(Player player, long coin){
+		modifyCoin(player,coin,EventLogType.charge);
+		long charge_total=player.getCharge_total()+coin/Config.instance().getIValue(ConfigField.CHARGE_RATE);
+		player.setCharge_total(charge_total);
+		int vip=getvipLevel(charge_total);
+		player.setVip(vip);
+		PlayerDataService.getInstance().refreshPlayerData(player);
+		
+		ProtocolMsg pMsg=new ProtocolMsg();
+		pMsg.put(Protocols.MAINCODE, Protocols.G2l_data_change.mainCode_value);
+		pMsg.put(Protocols.SUBCODE, Protocols.G2l_data_change.subCode_value);
+		pMsg.put(Protocols.G2l_data_change.UUID, player.getUuid());
+		pMsg.put(Protocols.G2l_data_change.VIP, player.getVip());
+		pMsg.put(Protocols.G2l_data_change.CHARGE_TOTAL, player.getCharge_total());
+		LoginMsgSender.getInstance().addMsg(pMsg);
+	}
+	
+	public void checkVip(Player player){
+		long charge_total=player.getCharge_total();
+		int vip=getvipLevel(charge_total);
+		if(vip == player.getVip()) return;
+		player.setVip(vip);
+//		PlayerDataService.getInstance().refreshPlayerData(player);
+		
+		ProtocolMsg pMsg=new ProtocolMsg();
+		pMsg.put(Protocols.MAINCODE, Protocols.G2l_data_change.mainCode_value);
+		pMsg.put(Protocols.SUBCODE, Protocols.G2l_data_change.subCode_value);
+		pMsg.put(Protocols.G2l_data_change.UUID, player.getUuid());
+		pMsg.put(Protocols.G2l_data_change.VIP, player.getVip());
+		pMsg.put(Protocols.G2l_data_change.CHARGE_TOTAL, player.getCharge_total());
+		LoginMsgSender.getInstance().addMsg(pMsg);
+	}
+	
+	public int getvipLevel(long charge){
+		//获取vip等级
+		JSONArray viplevel_list=AllTemplate.getvipLevel_jsonArray();
+		for(int i=0;i<viplevel_list.size()-1;i++){
+			if(charge>=viplevel_list.getJSONObject(i).getIntValue("charge")&&charge<viplevel_list.getJSONObject(i+1).getIntValue("charge")){
+				return viplevel_list.getJSONObject(i).getIntValue("vip");
+			}else if(charge>=viplevel_list.getJSONObject(viplevel_list.size()-1).getIntValue("charge")){
+				return viplevel_list.getJSONObject(viplevel_list.size()-1).getIntValue("vip");
+			}
+		}
+		return 0;
 	}
 }

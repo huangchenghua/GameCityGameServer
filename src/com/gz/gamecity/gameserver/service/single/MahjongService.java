@@ -112,7 +112,7 @@ public class MahjongService implements LogicHandler{
 
 	private void handleBet(Player player, ClientMsg cMsg) {
 		// TODO Auto-generated method stub
-		long bet = cMsg.getJson().getIntValue("bet");
+		long bet = cMsg.getJson().getIntValue(Protocols.C2g_mahjong_bet.BET);
 		
 		if(bet>player.getCoin()||bet<0){
 			cMsg.closeChannel();
@@ -129,9 +129,9 @@ public class MahjongService implements LogicHandler{
 		MahjongTable table = (MahjongTable)t;
 		table.putBet(player,bet);
 		
-		table.player_probability.put(player.getUuid(),cMsg.getJson().getIntValue("probability"));
+		table.player_probability.put(player.getUuid(),cMsg.getJson().getIntValue(Protocols.C2g_mahjong_bet.PROBABILITY));
 		
-		table.lock.put(player.getUuid(), cMsg.getJson().getBoolean("lock"));
+		table.lock.put(player.getUuid(), cMsg.getJson().getBoolean(Protocols.C2g_mahjong_bet.LOCK));
 		
 		table.handleRandom(player,cMsg);	
 	}
@@ -145,7 +145,7 @@ public class MahjongService implements LogicHandler{
 		if(result){
 			room.addTable(table);
 		}else{
-			cMsg.put(Protocols.ERRORCODE,"条件不满足");
+			cMsg.put(Protocols.ERRORCODE,AllTemplate.getGameString("str18"));
 		}
 		
 		table.enterRoom(player,cMsg);

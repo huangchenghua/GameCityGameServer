@@ -142,54 +142,60 @@ public final class Const {
 	 */
 	public static enum GameCardType {
 		//=============所有游戏通用=============
-		NORMAL						(0,1),//无特殊牌型
+		NORMAL						(0,1,""),//无特殊牌型
 		
 		//================德州====================
-		DZ_DOUBLE					(1,1),//一对
-		DZ_DOUBLE_DOUBLE			(2,1),//两对
-		DZ_TRANGLE_SINGLE			(3,1),//三条
-		DZ_QUEUE					(4,1),//顺子
-		DZ_SAME_SUITS				(5,1),//同花
-		DZ_TRANGLE_DOUBLE			(6,1),//葫芦
-		DZ_BOMB						(7,1),//四条
-		DZ_SAME_SUITS_QUEUE 		(8,1),//同花顺
-		DZ_ROYAL_SAME_SUITS_QUEUE	(9,1),//皇家同花顺
+		DZ_DOUBLE					(1,1,"一对"),//一对
+		DZ_DOUBLE_DOUBLE			(2,1,"两对"),//两对
+		DZ_TRANGLE_SINGLE			(3,1,"三条"),//三条
+		DZ_QUEUE					(4,1,"顺子"),//顺子
+		DZ_SAME_SUITS				(5,1,"同花"),//同花
+		DZ_TRANGLE_DOUBLE			(6,1,"葫芦"),//葫芦
+		DZ_BOMB						(7,1,"四条"),//四条
+		DZ_SAME_SUITS_QUEUE 		(8,1,"同花顺"),//同花顺
+		DZ_ROYAL_SAME_SUITS_QUEUE	(9,1,"皇家同花顺"),//皇家同花顺
 		
 		//================斗牛====================
-		DN_N1						(20,1),//牛1
-		DN_N2						(21,1),
-		DN_N3						(22,1),
-		DN_N4						(23,1),
-		DN_N5						(24,1),
-		DN_N6						(25,1),
-		DN_N7						(26,2),
-		DN_N8						(27,2),
-		DN_N9						(28,2),//牛9
-		DN_NN						(29,3),//牛牛
-		DN_TRANGLE_SINGLE			(30,3),//三条
-		DN_QUEUE					(31,3),//顺子
-		DN_SAME_SUITS				(32,3),//同花
-		DN_TRANGLE_DOUBLE			(33,4),//葫芦
-		DN_BOMB					(34,4),//四条
-		DN_SAME_SUITS_QUEUE 		(35,5),//同花顺
-		DN_ALL_ROYAL				(36,5),//五花牛
-		DN_NN_LESS_10				(37,5),//五小牛
+		DN_N1						(20,1,""),//牛1
+		DN_N2						(21,1,""),
+		DN_N3						(22,1,""),
+		DN_N4						(23,1,""),
+		DN_N5						(24,1,""),
+		DN_N6						(25,1,""),
+		DN_N7						(26,2,""),
+		DN_N8						(27,2,""),
+		DN_N9						(28,2,"牛9"),//牛9
+		DN_NN						(29,3,"牛牛"),//牛牛
+		DN_TRANGLE_SINGLE			(30,3,"三条"),//三条
+		DN_QUEUE					(31,3,"顺子"),//顺子
+		DN_SAME_SUITS				(32,3,"同花"),//同花
+		DN_TRANGLE_DOUBLE			(33,4,"葫芦"),//葫芦
+		DN_BOMB					(34,4,"四条"),//四条
+		DN_SAME_SUITS_QUEUE 		(35,5,"同花顺"),//同花顺
+		DN_ALL_ROYAL				(36,5,"五花牛"),//五花牛
+		DN_NN_LESS_10				(37,5,"五小牛"),//五小牛
 		
 		//================金花====================
-		JH_DOUBLE					(40,1),//对子
-		JH_QUEUE					(41,1),//顺子
-		JH_SAME_SUITS				(42,1),//金花
-		JH_SAME_SUITS_QUEUE			(43,1),//同花顺
-		JH_TRANGLE					(44,1) //三条
+		JH_DOUBLE					(40,1,"对子"),//对子
+		JH_QUEUE					(41,1,"顺子"),//顺子
+		JH_SAME_SUITS				(42,1,"金花"),//金花
+		JH_SAME_SUITS_QUEUE			(43,1,"同花顺"),//同花顺
+		JH_TRANGLE					(44,1,"三条") //三条
 		;
 		
 		private int value;
-		private GameCardType(int v,int odds){
+		private GameCardType(int v,int odds,String desc){
 			this.value = v;
 			this.odds = odds;
+			this.desc = desc;
 		}
 		private int odds;
+		private String desc;
 		
+		public String getDesc() {
+			return desc;
+		}
+
 		public int getOdds() {
 			return odds;
 		}

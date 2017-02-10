@@ -50,12 +50,12 @@ public class BlackAService implements LogicHandler{
 		// TODO Auto-generated method stub
 		Room room=RoomManager.getInstance().getRoom(RoomType.BlackA);
 		BlackATable table = (BlackATable)room.getTable(player.getTableId());
-		cMsg.put("errorCode", "收分");
+		cMsg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str19"));
 		table.player_star.put(player.getUuid(),0);
 		PlayerDataService.getInstance().modifyCoin(player, table.player_reward.get(player.getUuid()),EventLogType.blackA_bet);
 		table.player_reward.put(player.getUuid(),(long)0);
 		table.player_bet.put(player.getUuid(),(long)0);
-		cMsg.put("reward", table.player_reward.get(player.getUuid()));
+		cMsg.put(Protocols.G2c_blackA_reward.REWARD, table.player_reward.get(player.getUuid()));
 		PlayerMsgSender.getInstance().addMsg(cMsg);
 	}
 
@@ -92,7 +92,7 @@ public class BlackAService implements LogicHandler{
 		cMsg.put(Protocols.SUBCODE, Protocols.G2c_blackA_enter.subCode_value);
 		Room room=RoomManager.getInstance().enterRoom(player, RoomType.BlackA);
 		if(room==null){
-			cMsg.put(Protocols.ERRORCODE, "进入房间失败");
+			cMsg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str14"));
 			PlayerMsgSender.getInstance().addMsg(cMsg);
 			return;
 		}
@@ -105,7 +105,7 @@ public class BlackAService implements LogicHandler{
 		if(result){
 			room.addTable(table);
 		}else{
-			cMsg.put(Protocols.ERRORCODE,"条件不满足");
+			cMsg.put(Protocols.ERRORCODE,AllTemplate.getGameString("str18"));
 		}
 		
 		PlayerMsgSender.getInstance().addMsg(cMsg);

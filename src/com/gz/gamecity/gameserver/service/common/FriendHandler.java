@@ -87,14 +87,14 @@ public class FriendHandler implements LogicHandler {
 		if(count<1)return;
 		int amount = gift.getIntValue("price") * count;
 		if(amount>player.getCoin()){
-			msg.put(Protocols.ERRORCODE, "游戏币不足");
+			msg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str5"));
 			PlayerMsgSender.getInstance().addMsg(msg);
 			return;
 		}
 		PlayerMsgSender.getInstance().addMsg(msg);
 		PlayerDataService.getInstance().modifyCoin(player, -amount, EventLogType.send_gift);
 		
-		MailService.getInstance().sendMail(target, "收到礼物", "玩家"+player.getName()+"给你赠送了礼物", id+"~"+count, Mail.MAIL_TYPE_SYSTEM,player.getUuid());
+		MailService.getInstance().sendMail(target, AllTemplate.getGameString("str6"), AllTemplate.getGameString("str7")+player.getName()+AllTemplate.getGameString("str8"), id+"~"+count, Mail.MAIL_TYPE_SYSTEM,player.getUuid());
 	}
 
 	@Override

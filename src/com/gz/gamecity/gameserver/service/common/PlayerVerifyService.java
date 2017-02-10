@@ -73,12 +73,13 @@ public class PlayerVerifyService implements LogicHandler {
 				player.setSigned(j.getBooleanValue(Protocols.L2g_playerVerify.SIGNED));
 				player.setAlmsCnt(j.getByteValue(Protocols.L2g_playerVerify.ALMS_CNT));
 				player.setAlmsTime(j.getString(Protocols.L2g_playerVerify.ALMS_TIME));
-				JSONArray arr = j.getJSONArray("heads");
+				JSONArray arr = j.getJSONArray(Protocols.L2g_playerVerify.HEADS);
 				int[] heads = new int[arr.size()];
 				for(int i=0;i<heads.length;i++){
 					heads[i] = arr.getIntValue(i);
 				}
 				player.setHeads(heads);
+				PlayerDataService.getInstance().checkVip(player);
 				PlayerManager.getInstance().playerOnline(player);
 			}
 			
@@ -99,6 +100,7 @@ public class PlayerVerifyService implements LogicHandler {
 			cMsg.put(Protocols.G2c_login.SILENT, player.isSilent());
 			cMsg.put(Protocols.G2c_login.LASTSIGNDATE, player.getLastSignDate());
 			cMsg.put(Protocols.G2c_login.SIGNDAYS, player.getSignDays());
+			cMsg.put(Protocols.G2c_login.SIGNED, player.isSigned());
 			cMsg.put(Protocols.G2c_login.HEADS, player.getHeads());
 			PlayerMsgSender.getInstance().addMsg(cMsg);
 			

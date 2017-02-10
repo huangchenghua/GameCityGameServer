@@ -51,4 +51,8 @@ public abstract class Room {
 	public void addTable(GameTable table){
 		tables.put(table.getTableId(), table);
 	}
+	
+	public void closeRoom(){
+		
+	}
 }

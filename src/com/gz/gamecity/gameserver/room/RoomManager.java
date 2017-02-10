@@ -90,4 +90,10 @@ public class RoomManager {
 				room.playerLeave(player);
 		}
 	}
+	
+	public void closeAllRoom(){
+		for(Room room:rooms.values()){
+			room.closeRoom();
+		}
+	}
 }

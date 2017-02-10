@@ -1,6 +1,8 @@
 package com.gz.gamecity.gameserver.handler.impl;
 
 
+import org.apache.log4j.Logger;
+
 import com.gz.gamecity.gameserver.GSMsgReceiver;
 import com.gz.gamecity.gameserver.LSConnecter;
 import com.gz.gamecity.gameserver.config.ConfigField;
@@ -13,6 +15,7 @@ import io.netty.channel.Channel;
 
 public class LoginServerMsgHandler implements ProtocolClientMsgHandler{
 
+	private static final Logger log = Logger.getLogger(LoginServerMsgHandler.class);
 	@Override
 	public void onMsgReceived(ProtocolMsg msg) {
 		msg.parse();
@@ -21,7 +24,7 @@ public class LoginServerMsgHandler implements ProtocolClientMsgHandler{
 
 	@Override
 	public void onSessionClosed(Channel channel) {
-		System.out.println("与登录服的连接被断开====================================");
+		log.info("与登录服的连接被断开====================================");
 //		LSConnecter.getInstance().connectLoginServer();
 	}
 
@@ -39,7 +42,7 @@ public class LoginServerMsgHandler implements ProtocolClientMsgHandler{
 
 	@Override
 	public void onExceptionCaught(Channel channel, Throwable cause) {
-		System.out.println("网络异常"+cause.toString());
+		log.info("网络异常"+cause.toString());
 		try {
 			channel.close();
 		} catch (Exception e) {

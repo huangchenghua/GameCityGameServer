@@ -85,7 +85,12 @@ public class LabaTable extends GameTable{
 	
 	//猜金币处理
 	public void handleGuess(Player player,ClientMsg cMsg){
-		int rate = cMsg.getJson().getIntValue("rate");
+		int rate = cMsg.getJson().getIntValue(Protocols.C2g_laba_guess.RATE);
+		//如果下注倍率不为1，则先扣除提高倍率产生的注金
+		if(rate != 1){
+			long tempCashChange = player_bet2.get(player.getUuid())*(rate-1);
+			PlayerDataService.getInstance().modifyCoin(player,-tempCashChange,EventLogType.laba_bet);
+		}	
 		long playerCash1 = player_bet2.get(player.getUuid())*rate;
 		player_bet2.put(player.getUuid(),playerCash1);
 		int star = 0;
@@ -105,8 +110,8 @@ public class LabaTable extends GameTable{
 			option = 0;
 		}
 		cMsg.put(Protocols.SUBCODE,Protocols.G2c_laba_guess.subCode_value);
-		cMsg.put("option",option);
-		cMsg.put("star", star);
+		cMsg.put(Protocols.G2c_laba_guess.OPTION,option);
+		cMsg.put(Protocols.G2c_laba_guess.STAR, star);
 	
 		PlayerDataService.getInstance().addExp(player, 2);
 		PlayerMsgSender.getInstance().addMsg(cMsg);
@@ -144,8 +149,8 @@ public class LabaTable extends GameTable{
 		player_bet2.put(player.getUuid(), reward);
 		
 		cMsg.put(Protocols.SUBCODE,Protocols.G2c_laba_bet.subCode_value);
-		cMsg.put("option", option);
-		cMsg.put("reward", reward);
+		cMsg.put(Protocols.G2c_laba_bet.OPTION, option);
+		cMsg.put(Protocols.G2c_laba_bet.REWARD, reward);
 		
 		PlayerDataService.getInstance().addExp(player, 2);
 		PlayerMsgSender.getInstance().addMsg(cMsg);
@@ -191,5 +196,11 @@ public class LabaTable extends GameTable{
 		}
 		
 		return odds;
+	}
+
+	@Override
+	public void closeTable() {
+		// TODO Auto-generated method stub
+		
 	}
 }

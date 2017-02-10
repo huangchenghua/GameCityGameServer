@@ -3,6 +3,7 @@ package com.gz.gamecity.gameserver.service.fruit;
 import com.gz.gamecity.bean.Player;
 import com.gz.gamecity.gameserver.PlayerManager;
 import com.gz.gamecity.gameserver.PlayerMsgSender;
+import com.gz.gamecity.gameserver.config.AllTemplate;
 import com.gz.gamecity.gameserver.room.FruitRoom;
 import com.gz.gamecity.gameserver.room.Room;
 import com.gz.gamecity.gameserver.room.RoomManager;
@@ -44,8 +45,21 @@ public class FruitService implements LogicHandler {
 		case Protocols.C2g_fruit_leave_table.subCode_value:
 			handleReqLeaveTable(player,msg);
 			break;
+		case Protocols.C2g_fruit_rebet.subCode_value:
+			handleRebet(player,msg);
+			break;
 		default:
 			break;
+		}
+	}
+
+	private void handleRebet(Player player, ClientMsg msg) {
+		String tableId=player.getTableId();
+		Room room = RoomManager.getInstance().getRoom(RoomType.Fruit);
+		GameTable t = room.getTable(tableId);
+		if(t!=null){
+			FruitTable table = (FruitTable)t;
+			table.rebet(player, msg);
 		}
 	}
 
@@ -59,10 +73,10 @@ public class FruitService implements LogicHandler {
 				t.playerLeave(player.getUuid());
 				room.playerLeave(player);
 			}else{
-				msg.put(Protocols.ERRORCODE,"无法离开");
+				msg.put(Protocols.ERRORCODE,AllTemplate.getGameString("str12"));
 			}
 		}else{
-			msg.put(Protocols.ERRORCODE,"未知的错误");
+			msg.put(Protocols.ERRORCODE,AllTemplate.getGameString("str13"));
 		}
 		PlayerMsgSender.getInstance().addMsg(msg);
 		
@@ -94,13 +108,13 @@ public class FruitService implements LogicHandler {
 		msg.put(Protocols.SUBCODE, Protocols.G2c_fruit_enter.subCode_value);
 		Room room=RoomManager.getInstance().enterRoom(player, RoomType.Fruit);
 		if(room==null){
-			msg.put(Protocols.ERRORCODE, "进入房间失败");
+			msg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str14"));
 			PlayerMsgSender.getInstance().addMsg(msg);
 			return;
 		}
 		FruitTable table = ((FruitRoom)room).getTable();
 		if(!table.playerSitDown(player)){
-			msg.put(Protocols.ERRORCODE, "穷逼，先充点钱再来玩");
+			msg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str15"));
 			PlayerMsgSender.getInstance().addMsg(msg);
 			return;
 		}

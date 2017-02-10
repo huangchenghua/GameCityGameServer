@@ -32,7 +32,7 @@ public class TexasHandler implements LogicHandler {
 
 	@Override
 	public void handleMsg(BaseMsg msg) {
-		// TODO Auto-generated method stub
+		
 		Player player = null;
 		if (!msg.isInner()) {
 			player = PlayerManager.getPlayerFromMsg(msg);
@@ -193,7 +193,7 @@ public class TexasHandler implements LogicHandler {
 		{
 			PlayerMsgSender.getInstance().addMsg(clientMsg);
 			
-			clientMsg.put(Protocols.ERRORCODE, "进入房间失败");
+			clientMsg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str14"));
 			PlayerMsgSender.getInstance().addMsg(clientMsg);
 			return ;
 		}
@@ -219,13 +219,13 @@ public class TexasHandler implements LogicHandler {
 			}
 		}
 		if (json_config == null) {
-			clientMsg.put(Protocols.ERRORCODE, "找不到房间(lv=" + nChooseLv + ")");
+			clientMsg.put(Protocols.ERRORCODE,AllTemplate.getGameString("str20") + nChooseLv + ")");
 			PlayerMsgSender.getInstance().addMsg(clientMsg);
 			return;
 		}
 		
 		if (player.getCoin() < json_config.getLongValue("banker_condition")) {
-			clientMsg.put(Protocols.ERRORCODE, "钱太少不够资格");
+			clientMsg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str21"));
 			PlayerMsgSender.getInstance().addMsg(clientMsg);
 			return ;
 		}
@@ -236,7 +236,7 @@ public class TexasHandler implements LogicHandler {
 			if ( room == null )
 			{
 				PlayerMsgSender.getInstance().addMsg(clientMsg);
-				clientMsg.put(Protocols.ERRORCODE, "进入房间失败");
+				clientMsg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str14"));
 				PlayerMsgSender.getInstance().addMsg(clientMsg);
 				return ;
 			}
@@ -252,14 +252,14 @@ public class TexasHandler implements LogicHandler {
 		}
 		
 		if (table.canSitDown(player) == false) {
-			clientMsg.put(Protocols.ERRORCODE,"进入条件不满足");
+			clientMsg.put(Protocols.ERRORCODE,AllTemplate.getGameString("str18"));
 			PlayerMsgSender.getInstance().addMsg(clientMsg);
 			return;
 		}
 		
 		table.sendTableLvMsg(player, false);
 		if (!table.playerSitDown(player)) {
-			clientMsg.put(Protocols.ERRORCODE,"条件不满足");
+			clientMsg.put(Protocols.ERRORCODE,AllTemplate.getGameString("str18"));
 			PlayerMsgSender.getInstance().addMsg(clientMsg);
 			return;
 		}

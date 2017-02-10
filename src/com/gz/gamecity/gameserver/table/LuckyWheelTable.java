@@ -61,7 +61,7 @@ public class LuckyWheelTable extends GameTable{
 				}
 			}
 			if(json==null){
-				cMsg.put(Protocols.ERRORCODE, "数值错误");
+				cMsg.put(Protocols.ERRORCODE, AllTemplate.getGameString("str28"));
 			}
 		int rd=(int)(Math.random()*10000)+1;
 		
@@ -69,10 +69,10 @@ public class LuckyWheelTable extends GameTable{
 		for(int i=0;i<json.size();i++){
 			JSONObject jobj=(JSONObject)json.get(i);
 			if(rd>=Integer.parseInt(jobj.getString("startValue"))&&rd<=Integer.parseInt(jobj.getString("endValue"))){
-				cMsg.put("id",Integer.parseInt(jobj.getString("id")));
+				cMsg.put(Protocols.G2c_luckyWheel_reward.ID,Integer.parseInt(jobj.getString("id")));
 				reward=Integer.parseInt(jobj.getString("prize"));
 				putCoin(player, reward);
-				cMsg.put("profit",reward);
+				cMsg.put(Protocols.G2c_luckyWheel_reward.PROFIT,reward);
 				break;
 			}
 		}
@@ -93,6 +93,12 @@ public class LuckyWheelTable extends GameTable{
 	public void playerReconnect(Player player) {
 		playerLeave(player.getUuid());
 		room.playerLeave(player);
+	}
+
+	@Override
+	public void closeTable() {
+		// TODO Auto-generated method stub
+		
 	}
 
 
